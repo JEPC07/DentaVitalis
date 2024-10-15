@@ -1,0 +1,184 @@
+/* Estilos generales */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Open Sans', sans-serif;
+    height: 100%;
+    overflow: hidden; /* Evita el scroll */
+}
+
+.split-container {
+    display: flex;
+    height: 100vh;
+    position: relative;
+}
+
+.left-side {
+    flex: 1;
+    background-image: url('C:/Users/USER/Documents/pagina ofi/enma.jpg');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    z-index: 1;
+}
+
+.right-side {
+    flex: 1;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 2; /* Mayor que el z-index del lado izquierdo */
+    box-shadow: -10px 0 20px rgba(0, 0, 0, 0.3); /* Sombra pronunciada en el borde izquierdo */
+}
+
+.content-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80%;
+    max-width: 400px;
+}
+
+h1 {
+    font-family: 'Lora', serif;
+    font-size: 2.5em;
+    color: #333333;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* Estilos del header */
+header {
+    background-color: rgba(2, 23, 52, 0.8); /* Fondo semitransparente */
+    color: rgb(135, 135, 135);
+    text-align: center;
+    font-size: 80px;
+    padding: 80px;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000; /* Asegura que el header esté por encima del contenido */
+}
+
+/* Estilos de la navegación en el header */
+nav ul.nav-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+nav ul.nav-links li {
+    display: inline;
+    margin: 0 15px;
+}
+
+nav ul.nav-links a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+
+/* Estilos adicionales */
+.btn {
+    background-color: #3a546f;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 18px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    align-self: center;
+    width: 100%;
+}
+
+.btn:hover {
+    background-color: #2c405a;
+    transform: translateY(-2px);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+#error-message {
+    color: #e74c3c;
+    text-align: center;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Estilo para el título en la sección hero */
+.hero h1 {
+    font-family: 'Lora', serif; /* Fuente seria para el título */
+    font-size: 4em; /* Ajusta el tamaño de la fuente según lo necesites */
+    color: #141a24; /* Gris oscuro */
+    text-shadow: 4px 4px 5px rgba(255, 255, 255, 0.5); /* Sombra negra transparente */
+}
+
+/* Estilo para el formulario de login */
+.login-container {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+
+#login-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-bottom: 2px solid #ddd;
+    background-color: transparent;
+    transition: border-color 0.3s;
+}
+
+.input-group label {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    font-size: 16px;
+    color: #999;
+    pointer-events: none;
+    transition: 0.3s ease all;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-bottom-color: #3a546f;
+}
+
+.input-group input:focus ~ label,
+.input-group input:valid ~ label {
+    top: -20px;
+    font-size: 14px;
+    color: #3a546f;
+}
+
+.input-group i {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    color: #999;
+}
