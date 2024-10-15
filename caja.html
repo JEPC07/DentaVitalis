@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Caja - DentaVitalis</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400,600,700" rel="stylesheet">
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="style-secondary.css" rel="stylesheet">
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f0f3f7;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            overflow-y: auto;
+            min-height: 100vh;
+        }
+
+        /* Barra de navegación superior */
+        .navbar {
+            background-color: #295369;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .navbar h2 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        /* Barra de navegación lateral */
+        .sidebar {
+            width: 250px;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px 0;
+            height: 100%;
+            position: fixed;
+            left: 0;
+            top: 0;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-header {
+            text-align: center;
+            padding: 20px 0;
+            background-color: #34495e;
+        }
+
+        .sidebar-header h2 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar-menu a {
+            color: #ecf0f1;
+            text-decoration: none;
+            display: block;
+            padding: 12px 20px;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background-color: #34495e;
+            border-left-color: #3498db;
+        }
+
+        .sidebar-menu i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Contenedor principal */
+        .main-container {
+            margin-left: 250px;
+            padding: 40px;
+            min-height: calc(100vh - 80px);
+            overflow-y: auto;
+        }
+
+        /* Estilos para las secciones */
+        .section {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+
+        .section h2 {
+            color: #295369;
+            margin-bottom: 30px;
+            font-size: 24px;
+            font-weight: 700;
+            border-bottom: 2px solid #295369;
+            padding-bottom: 15px;
+        }
+
+        /* Formularios */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #34495e;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #295369;
+            box-shadow: 0 0 0 3px rgba(41, 83, 105, 0.1);
+            outline: none;
+        }
+
+        .btn {
+            background-color: #295369;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #1d3c50;
+        }
+
+        /* Resumen */
+        .summary {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .summary-item {
+            background-color: #f8f9fc;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            flex: 1;
+            margin: 0 10px;
+        }
+
+        .summary-item h3 {
+            margin: 0;
+            font-size: 18px;
+            color: #34495e;
+        }
+
+        .summary-item p {
+            font-size: 24px;
+            font-weight: 700;
+            margin: 10px 0 0;
+            color: #295369;
+        }
+
+        /* Tabla de transacciones */
+        .transactions-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .transactions-table th, .transactions-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .transactions-table th {
+            background-color: #f0f3f7;
+            color: #295369;
+            font-weight: 600;
+        }
+
+        .transactions-table tr:hover {
+            background-color: #f8f9fc;
+        }
+
+        .income {
+            color: #27ae60;
+        }
+
+        .expense {
+            color: #e74c3c;
+        }
+
+        .delete-btn {
+            background-color: #e74a3b;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .delete-btn:hover {
+            background-color: #c0392b;
+        }
+
+        .custom-select {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+        .custom-select select {
+            display: none;
+        }
+        .select-selected {
+            background-color: #fff;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            padding: 10px;
+        }
+        .select-selected:after {
+            position: absolute;
+            content: "";
+            top: 14px;
+            right: 10px;
+            width: 0;
+            height: 0;
+            border: 6px solid transparent;
+            border-color: #295369 transparent transparent transparent;
+        }
+        .select-items div,.select-selected {
+            color: #333;
+            padding: 8px 16px;
+            border: 1px solid transparent;
+            border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+            cursor: pointer;
+        }
+        .select-items {
+            position: absolute;
+            background-color: #fff;
+            top: 100%;
+            left: 0;
+            right: 0;
+            z-index: 99;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 2px solid #e0e0e0;
+            border-top: none;
+            border-radius: 0 0 5px 5px;
+        }
+        .select-hide {
+            display: none;
+        }
+        .select-items div:hover, .same-as-selected {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Barra de navegación superior -->
+    <div class="navbar">
+        <h2>Gestión de Caja</h2>
+    </div>
+
+    <!-- Barra de navegación lateral -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2><i class="fas fa-tooth"></i> DentaVitalis</h2>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="secondary.html"><i class="fas fa-home"></i>Menú Principal</a></li>
+            <li><a href="crear_historia_clinica.html"><i class="fas fa-file-medical"></i>Crear Historia Clínica</a></li>
+            <li><a href="inventario_de_materiales.html"><i class="fas fa-boxes"></i>Inventario de Materiales</a></li>
+            <li><a href="caja.html" class="active"><i class="fas fa-cash-register"></i>Caja</a></li>
+            <li><a href="busqueda_de_pacientes.html"><i class="fas fa-search"></i>Búsqueda de Pacientes</a></li>
+        </ul>
+    </div>
+
+    <!-- Contenedor principal -->
+    <div class="main-container">
+        <!-- Sección de Resumen -->
+        <div class="section">
+            <h2>Resumen de Caja</h2>
+            <div class="summary">
+                <div class="summary-item">
+                    <h3>Ingresos Totales</h3>
+                    <p class="income">$10,500.00</p>
+                </div>
+                <div class="summary-item">
+                    <h3>Egresos Totales</h3>
+                    <p class="expense">$3,200.00</p>
+                </div>
+                <div class="summary-item">
+                    <h3>Balance</h3>
+                    <p>$7,300.00</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección de Registro de Ingresos -->
+        <div class="section">
+            <h2>Registrar Ingreso</h2>
+            <form id="income-form">
+                <div class="form-group">
+                    <label for="income-amount">Monto</label>
+                    <input type="number" id="income-amount" class="form-control" placeholder="Ingrese el monto" required>
+                </div>
+                <div class="form-group">
+                    <label for="income-description">Descripción</label>
+                    <div class="custom-select">
+                        <select id="income-description" required>
+                            <option value="">Seleccione o escriba una descripción</option>
+                            <option value="Restauración">Restauración</option>
+                            <option value="Incrustación">Incrustación</option>
+                            <option value="Incrustación de zirconio">Incrustación de zirconio</option>
+                            <option value="Corona ceromero">Corona ceromero</option>
+                            <option value="Corona de porcelana">Corona de porcelana</option>
+                            <option value="Corona de zirconio">Corona de zirconio</option>
+                            <option value="Exodoncia simple">Exodoncia simple</option>
+                            <option value="Exodoncia compleja (tercer molar)">Exodoncia compleja (tercer molar)</option>
+                            <option value="Carilla zirconio">Carilla zirconio</option>
+                            <option value="Carilla de resina">Carilla de resina</option>
+                            <option value="Endodoncia anterior">Endodoncia anterior</option>
+                            <option value="Endodoncia posterior">Endodoncia posterior</option>
+                            <option value="Perno fibra de vidrio">Perno fibra de vidrio</option>
+                            <option value="Pulpotomia - pulpectomia">Pulpotomia - pulpectomia</option>
+                            <option value="Profilaxis">Profilaxis</option>
+                            <option value="Profilaxis + fluor">Profilaxis + fluor</option>
+                            <option value="Profilaxis + blanqueamiento">Profilaxis + blanqueamiento</option>
+                            <option value="Sellantes">Sellantes</option>
+                            <option value="Restauración lonomero niños">Restauración lonomero niños</option>
+                            <option value="Ferula miorrelajante">Ferula miorrelajante</option>
+                            <option value="Protesis total">Protesis total</option>
+                            <option value="Protesis individual">Protesis individual</option>
+                            <option value="Protesis parcial removible">Protesis parcial removible</option>
+                            <option value="Implante con porcelana">Implante con porcelana</option>
+                            <option value="Implante con zirconio">Implante con zirconio</option>
+                            <option value="custom">Otro (especificar)</option>
+                        </select>
+                    </div>
+                    <input type="text" id="custom-description" class="form-control" style="display: none; margin-top: 10px;" placeholder="Ingrese una descripción personalizada">
+                </div>
+                <div class="form-group">
+                    <label for="income-date">Fecha</label>
+                    <input type="date" id="income-date" class="form-control" required>
+                </div>
+                <button type="submit" class="btn">Registrar Ingreso</button>
+            </form>
+        </div>
+
+        <!-- Sección de Registro de Egresos -->
+        <div class="section">
+            <h2>Registrar Egreso</h2>
+            <form>
+                <div class="form-group">
+                    <label for="expense-amount">Monto</label>
+                    <input type="number" id="expense-amount" class="form-control" placeholder="Ingrese el monto" required>
+                </div>
+                <div class="form-group">
+                    <label for="expense-description">Descripción</label>
+                    <input type="text" id="expense-description" class="form-control" placeholder="Descripción del egreso" required>
+                </div>
+                <div class="form-group">
+                    <label for="expense-date">Fecha</label>
+                    <input type="date" id="expense-date" class="form-control" required>
+                </div>
+                <button type="submit" class="btn">Registrar Egreso</button>
+            </form>
+        </div>
+
+        <!-- Sección de Historial de Transacciones -->
+        <div class="section">
+            <h2>Historial de Transacciones</h2>
+            <table class="transactions-table">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Descripción</th>
+                        <th>Tipo</th>
+                        <th>Monto</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Las transacciones se agregarán aquí dinámicamente -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Función para cargar los datos almacenados o inicializar si no existen
+        function loadData() {
+            let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+            let totalIncome = parseFloat(localStorage.getItem('totalIncome')) || 0;
+            let totalExpense = parseFloat(localStorage.getItem('totalExpense')) || 0;
+            return { transactions, totalIncome, totalExpense };
+        }
+
+        // Función para guardar los datos
+        function saveData(transactions, totalIncome, totalExpense) {
+            localStorage.setItem('transactions', JSON.stringify(transactions));
+            localStorage.setItem('totalIncome', totalIncome);
+            localStorage.setItem('totalExpense', totalExpense);
+        }
+
+        // Función para actualizar el resumen
+        function updateSummary(totalIncome, totalExpense) {
+            document.querySelector('.income').textContent = `$${totalIncome.toFixed(2)}`;
+            document.querySelector('.expense').textContent = `$${totalExpense.toFixed(2)}`;
+            document.querySelector('.summary-item:last-child p').textContent = `$${(totalIncome - totalExpense).toFixed(2)}`;
+        }
+
+        // Función para agregar una nueva transacción a la tabla
+        function addTransactionToTable(transaction, index) {
+            const tbody = document.querySelector('.transactions-table tbody');
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${transaction.date}</td>
+                <td>${transaction.description}</td>
+                <td>${transaction.type}</td>
+                <td class="${transaction.type === 'Ingreso' ? 'income' : 'expense'}">$${transaction.amount.toFixed(2)}</td>
+                <td><button class="delete-btn" data-index="${index}">Eliminar</button></td>
+            `;
+            tbody.insertBefore(tr, tbody.firstChild);
+        }
+
+        // Función para eliminar una transacción
+        function deleteTransaction(index) {
+            const transaction = transactions[index];
+            transactions.splice(index, 1);
+            if (transaction.type === 'Ingreso') {
+                totalIncome -= transaction.amount;
+            } else {
+                totalExpense -= transaction.amount;
+            }
+            updateSummary(totalIncome, totalExpense);
+            saveData(transactions, totalIncome, totalExpense);
+            renderTransactions();
+        }
+
+        // Función para renderizar todas las transacciones
+        function renderTransactions() {
+            const tbody = document.querySelector('.transactions-table tbody');
+            tbody.innerHTML = '';
+            transactions.forEach((transaction, index) => {
+                addTransactionToTable(transaction, index);
+            });
+        }
+
+        // Cargar datos al iniciar la página
+        let { transactions, totalIncome, totalExpense } = loadData();
+        updateSummary(totalIncome, totalExpense);
+
+        // Mostrar transacciones existentes
+        renderTransactions();
+
+        // Función para crear un select personalizado
+        function customSelect() {
+            var x, i, j, l, ll, selElmnt, a, b, c;
+            x = document.getElementsByClassName("custom-select");
+            l = x.length;
+            for (i = 0; i < l; i++) {
+                selElmnt = x[i].getElementsByTagName("select")[0];
+                ll = selElmnt.length;
+                a = document.createElement("DIV");
+                a.setAttribute("class", "select-selected");
+                a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
+                x[i].appendChild(a);
+                b = document.createElement("DIV");
+                b.setAttribute("class", "select-items select-hide");
+                for (j = 1; j < ll; j++) {
+                    c = document.createElement("DIV");
+                    c.innerHTML = selElmnt.options[j].innerHTML;
+                    c.addEventListener("click", function(e) {
+                        var y, i, k, s, h, sl, yl;
+                        s = this.parentNode.parentNode.getElementsByTagName("select")[0];
+                        sl = s.length;
+                        h = this.parentNode.previousSibling;
+                        for (i = 0; i < sl; i++) {
+                            if (s.options[i].innerHTML == this.innerHTML) {
+                                s.selectedIndex = i;
+                                h.innerHTML = this.innerHTML;
+                                y = this.parentNode.getElementsByClassName("same-as-selected");
+                                yl = y.length;
+                                for (k = 0; k < yl; k++) {
+                                    y[k].removeAttribute("class");
+                                }
+                                this.setAttribute("class", "same-as-selected");
+                                break;
+                            }
+                        }
+                        h.click();
+                        if (s.value === "custom") {
+                            document.getElementById("custom-description").style.display = "block";
+                        } else {
+                            document.getElementById("custom-description").style.display = "none";
+                        }
+                    });
+                    b.appendChild(c);
+                }
+                x[i].appendChild(b);
+                a.addEventListener("click", function(e) {
+                    e.stopPropagation();
+                    closeAllSelect(this);
+                    this.nextSibling.classList.toggle("select-hide");
+                    this.classList.toggle("select-arrow-active");
+                });
+            }
+        }
+
+        function closeAllSelect(elmnt) {
+            var x, y, i, xl, yl, arrNo = [];
+            x = document.getElementsByClassName("select-items");
+            y = document.getElementsByClassName("select-selected");
+            xl = x.length;
+            yl = y.length;
+            for (i = 0; i < yl; i++) {
+                if (elmnt == y[i]) {
+                    arrNo.push(i)
+                } else {
+                    y[i].classList.remove("select-arrow-active");
+                }
+            }
+            for (i = 0; i < xl; i++) {
+                if (arrNo.indexOf(i)) {
+                    x[i].classList.add("select-hide");
+                }
+            }
+        }
+
+        document.addEventListener("click", closeAllSelect);
+
+        // Llamar a la función para crear el select personalizado
+        customSelect();
+
+        // Manejar el formulario de ingresos
+        document.getElementById('income-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const amount = parseFloat(document.getElementById('income-amount').value);
+            let description = document.getElementById('income-description').value;
+            if (description === "custom") {
+                description = document.getElementById('custom-description').value;
+            }
+            const date = document.getElementById('income-date').value;
+
+            const transaction = { date, description, type: 'Ingreso', amount };
+            transactions.unshift(transaction);
+            totalIncome += amount;
+
+            updateSummary(totalIncome, totalExpense);
+            saveData(transactions, totalIncome, totalExpense);
+            renderTransactions();
+
+            this.reset();
+            document.querySelector('.select-selected').innerHTML = "Seleccione o escriba una descripción";
+            document.getElementById('custom-description').style.display = "none";
+        });
+
+        // Manejar el formulario de egresos
+        document.querySelectorAll('form')[1].addEventListener('submit', function(e) {
+            e.preventDefault();
+            const amount = parseFloat(document.getElementById('expense-amount').value);
+            const description = document.getElementById('expense-description').value;
+            const date = document.getElementById('expense-date').value;
+
+            const transaction = { date, description, type: 'Egreso', amount };
+            transactions.unshift(transaction);
+            totalExpense += amount;
+
+            updateSummary(totalIncome, totalExpense);
+            saveData(transactions, totalIncome, totalExpense);
+            renderTransactions();
+
+            this.reset();
+        });
+
+        // Manejar la eliminación de transacciones
+        document.querySelector('.transactions-table').addEventListener('click', function(e) {
+            if (e.target.classList.contains('delete-btn')) {
+                const index = parseInt(e.target.getAttribute('data-index'));
+                deleteTransaction(index);
+            }
+        });
+    </script>
+</body>
+
+</html>

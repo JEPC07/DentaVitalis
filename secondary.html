@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>DentaVitalis</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" type="text/css"> 
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="style-secondary.css" rel="stylesheet">
+    <!-- FullCalendar CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+    <div id="wrapper">
+        <!-- Top Navigation Bar -->
+        <header>
+            <nav class="navbar navbar-expand navbar-light bg-primary border-bottom border-dark" id="topNav">
+                <h1 class="text-light"><i class="fas fa-tooth"></i> DentaVitalis</h1>
+            </nav>
+
+            <!-- Secondary Navigation Bar -->
+            <nav class="navbar navbar-expand navbar-light bg-secondary border-bottom border-light" id="secondaryNav">
+                <div class="container">
+                    <div class="button-container">
+                        <button class="nav-button" onclick="location.href='crear_historia_clinica.html'">
+                            <i class="fas fa-user-md"></i> CREAR HISTORIA CLÍNICA
+                        </button>
+                        <button class="nav-button" onclick="location.href='inventario_de_materiales.html'">
+                            <i class="fas fa-boxes"></i> INVENTARIO DE MATERIALES
+                        </button>
+                        <button class="nav-button" onclick="location.href='caja.html'">
+                            <i class="fas fa-cash-register"></i> CAJA
+                        </button>
+                        <button class="nav-button" onclick="location.href='busqueda_de_pacientes.html'">
+                            <i class="fas fa-search"></i> BÚSQUEDA DE PACIENTES
+                        </button>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-container">
+            <div class="calendar-and-events-container">
+                <!-- Calendar Section -->
+                <div id="calendar-section" class="calendar-container">
+                    <h3 class="calendar-title">Agenda de Citas</h3>
+                    <div id="calendar"></div>
+                </div>
+
+                <!-- Panel de Control -->
+                <div class="control-panel">
+                    <h3>Próximas Citas</h3>
+                    <div class="card shadow mb-4">
+                        <div class="card-body" id="task-list">
+                            <!-- El contenido se llenará dinámicamente -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin-2.min.js"></script>
+
+    <!-- FullCalendar JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const calendarEl = document.getElementById('calendar');
+            const eventModal = document.getElementById('eventModal');
+            var eventForm = document.getElementById('eventForm');
+            var closeBtn = eventModal.querySelector('.close-btn');
+            var deleteBtn = document.getElementById('btn-delete');
+            var calendar;
+
+            // Función para guardar eventos en localStorage
+            async function saveEvents(events) {
+                try {
+                    await localStorage.setItem('calendarEvents', JSON.stringify(events));
+                } catch (error) {
+                    console.error('Error al guardar eventos:', error);
+                }
+            }
+
+            // Función para cargar eventos desde localStorage
+            function loadEvents() {
+                var storedEvents = localStorage.getItem('calendarEvents');
+                return storedEvents ? JSON.parse(storedEvents) : [];
+            }
+
+            // Función para eliminar eventos pasados
+            function removePassedEvents() {
+                var currentDate = new Date();
+                var events = loadEvents();
+                var updatedEvents = events.filter(function(event) {
+                    return new Date(event.end) > currentDate;
+                });
+                saveEvents(updatedEvents);
+                return updatedEvents;
+            }
+
+            // Función para abrir el modal
+            function openModal(date, existingEvent) {
+                document.getElementById('modalTitle').textContent = existingEvent ? 'Editar Cita' : 'Crear Cita';
+                document.getElementById('eventId').value = existingEvent ? existingEvent.id : '';
+                document.getElementById('eventTitle').value = existingEvent ? existingEvent.title : '';
+                document.getElementById('eventDoctor').value = existingEvent ? existingEvent.extendedProps.doctor : '';
+                document.getElementById('eventDate').value = existingEvent ? existingEvent.start.toISOString().split('T')[0] : date.toISOString().split('T')[0];
+                document.getElementById('eventStartTime').value = existingEvent ? existingEvent.start.toTimeString().slice(0,5) : date.toTimeString().slice(0,5);
+                document.getElementById('eventEndTime').value = existingEvent ? (existingEvent.end ? existingEvent.end.toTimeString().slice(0,5) : existingEvent.start.toTimeString().slice(0,5)) : date.toTimeString().slice(0,5);
+                document.getElementById('eventColor').value = existingEvent ? existingEvent.backgroundColor : '#3788d8';
+                
+                // Mostrar u ocultar el botón de eliminar
+                deleteBtn.style.display = existingEvent ? 'inline-block' : 'none';
+                
+                eventModal.style.display = 'block';
+            }
+
+
+            // Función para cerrar el modal
+            const closeModal = () => {
+                eventModal.style.display = 'none';
+            };
+
+            closeBtn.onclick = closeModal;
+            window.onclick = function(event) {
+                if (event.target == eventModal) {
+                    closeModal();
+                }
+            };
+
+            // Manejar el envío del formulario
+            eventForm.onsubmit = function(e) {
+                e.preventDefault();
+                var eventDate = document.getElementById('eventDate').value;
+                var eventStartTime = document.getElementById('eventStartTime').value;
+                var eventEndTime = document.getElementById('eventEndTime').value;
+                var eventData = {
+                    id: document.getElementById('eventId').value || Date.now().toString(),
+                    title: document.getElementById('eventTitle').value,
+                    start: eventDate + 'T' + eventStartTime,
+                    end: eventDate + 'T' + eventEndTime,
+                    backgroundColor: document.getElementById('eventColor').value,
+                    borderColor: document.getElementById('eventColor').value,
+                    textColor: '#ffffff',
+                    extendedProps: {
+                        doctor: document.getElementById('eventDoctor').value
+                    }
+                };
+
+                var existingEvent = calendar.getEventById(eventData.id);
+                if (existingEvent) {
+                    existingEvent.remove();
+                }
+                calendar.addEvent(eventData);
+                
+                var events = calendar.getEvents().map(event => event.toPlainObject());
+                saveEvents(events);
+                
+                updateTaskList();
+                closeModal();
+            };
+
+            // Función para actualizar la lista de tareas
+            function updateTaskList() {
+                const taskList = document.getElementById('task-list');
+                taskList.innerHTML = '';
+                const currentDate = new Date();
+                const upcomingEvents = calendar.getEvents()
+                    .filter(event => event.start >= currentDate)
+                    .sort((a, b) => a.start.valueOf() - b.start.valueOf())
+                    .slice(0, 10);
+
+                if (upcomingEvents.length === 0) {
+                    taskList.innerHTML = '<div class="no-events">No hay citas próximas.</div>';
+                    return;
+                }
+
+                upcomingEvents.forEach(event => {
+                    const task = document.createElement('div');
+                    task.className = 'upcoming-event';
+                    task.style.borderLeftColor = event.backgroundColor;
+                    task.innerHTML = `
+                        <h5 style="color: ${event.backgroundColor}">${event.title}</h5>
+                        <p>Doctor: ${event.extendedProps.doctor}</p>
+                        <p>Fecha: ${event.start.toLocaleDateString('es-ES')}</p>
+                        <p>Hora: ${event.start.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })} - ${event.end.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}</p>
+                    `;
+                    taskList.appendChild(task);
+                });
+            }
+
+            // Inicializar el calendario
+            calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'timeGridWeek',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                buttonText: {
+                    today: 'Hoy',
+                    month: 'Mes',
+                    week: 'Semana',
+                    day: 'Día'
+                },
+                // Modificar esta configuración para la vista mensual
+                views: {
+                    dayGridMonth: {
+                        fixedWeekCount: false,
+                        showNonCurrentDates: true
+                    }
+                },
+                slotDuration: '00:30:00',
+                slotLabelInterval: '01:00',
+                slotMinTime: '07:00:00',
+                slotMaxTime: '20:00:00',
+                allDaySlot: false,
+                nowIndicator: true,
+                locale: 'es',
+                editable: true,
+                selectable: true,
+                selectMirror: true,
+                dayMaxEvents: false,
+                dayHeaderFormat: { weekday: 'short' },
+                dayHeaderContent: function(args) {
+                    if (calendar.view.type === 'timeGridWeek') {
+                        return {
+                            html:
+                                '<div class="fc-day-header">' +
+                                    '<div class="day-name">' + args.text + '</div>' +
+                                    '<div class="day-number">' + args.date.getDate() + '</div>' +
+                                '</div>'
+                        };
+                    } else {
+                        return {
+                            html:
+                                '<div class="fc-day-header">' +
+                                    '<div class="day-name">' + args.text + '</div>' +
+                                '</div>'
+                        };
+                    }
+                },
+                dayCellContent: function(args) {
+                    return {
+                        html:
+                            '<div class="fc-day-number">' + args.dayNumberText + '</div>'
+                    };
+                },
+                events: removePassedEvents(),
+                eventContent: function(arg) {
+                    return {
+                        html:
+                            '<div class="fc-event-main-frame" style="background-color:' + arg.event.backgroundColor + '; color: #ffffff; padding: 2px; border-radius: 3px;">' +
+                                '<div class="fc-event-time" style="font-weight: bold;">' + arg.timeText + '</div>' +
+                                '<div class="fc-event-title-container">' +
+                                    '<div class="fc-event-title fc-sticky" style="font-weight: bold;">' + arg.event.title + '</div>' +
+                                    '<div class="fc-event-doctor" style="font-style: italic;">' + arg.event.extendedProps.doctor + '</div>' +
+                                '</div>' +
+                            '</div>'
+                    };
+                },
+                select: function(info) {
+                    openModal(info.start);
+                },
+                eventClick: function(info) {
+                    openModal(info.event.start, info.event);
+                },
+                eventAdd: function(info) {
+                    updateTaskList();
+                },
+                eventChange: function(info) {
+                    var events = calendar.getEvents().map(event => event.toPlainObject());
+                    saveEvents(events);
+                    updateTaskList();
+                },
+                eventRemove: function(info) {
+                    var events = calendar.getEvents().map(event => event.toPlainObject());
+                    saveEvents(events);
+                    updateTaskList();
+                },
+                height: '100%',
+            });
+
+            calendar.render();
+            updateTaskList();
+
+            // Función para eliminar un evento
+            function deleteEvent() {
+                var eventId = document.getElementById('eventId').value;
+                if (eventId) {
+                    var event = calendar.getEventById(eventId);
+                    if (event) {
+                        event.remove();
+                        var events = calendar.getEvents().map(event => event.toPlainObject());
+                        saveEvents(events);
+                        updateTaskList();
+                        closeModal();
+                    }
+                }
+            }
+
+            // Agregar evento de clic al botón de eliminar
+            deleteBtn.addEventListener('click', deleteEvent);
+        });
+    </script>
+
+    <!-- Modal para Crear/Editar Eventos -->
+    <div id="eventModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 id="modalTitle">Crear/Editar Cita</h4>
+                <span class="close-btn">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="eventForm">
+                    <input type="hidden" id="eventId">
+                    <div class="form-group">
+                        <label for="eventTitle">Nombre del Paciente:</label>
+                        <input type="text" id="eventTitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="eventDoctor">Doctor que atiende:</label>
+                        <select id="eventDoctor" required>
+                            <option value="">Seleccione un doctor</option>
+                            <option value="Enmanuel">Enmanuel</option>
+                            <option value="Pilar">Pilar</option>
+                            <option value="Edson">Edson</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="eventDate">Fecha:</label>
+                        <input type="date" id="eventDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="eventStartTime">Hora de inicio:</label>
+                        <input type="time" id="eventStartTime" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="eventEndTime">Hora de fin:</label>
+                        <input type="time" id="eventEndTime" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="eventColor">Color:</label>
+                        <select id="eventColor">
+                            <option value="#3788d8">Azul</option>
+                            <option value="#28a745">Verde</option>
+                            <option value="#dc3545">Rojo</option>
+                            <option value="#ffc107">Amarillo</option>
+                        </select>
+                    </div>
+                    <div class="button-group">
+                        <button type="submit" class="btn-save">Guardar</button>
+                        <button type="button" id="btn-delete" class="btn-delete">Eliminar Cita</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

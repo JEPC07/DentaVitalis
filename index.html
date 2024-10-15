@@ -1,0 +1,46 @@
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DentaVitalis</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Enlace a Google Fonts para usar "Lora" y "Open Sans" -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+    <div class="split-container">
+        <div class="left-side">
+        </div>
+        <div class="right-side">
+            <div class="content-container">
+                <h1>Bienvenido a DentaVitalis</h1>
+                <div class="login-container">
+                    <form id="login-form">
+                        <div class="input-group">
+                            <input type="password" id="password" name="password" required>
+                            <label for="password">Ingrese la contraseña</label>
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <button type="submit" class="btn">Ingresar</button>
+                        <p id="error-message" class="hidden">Contraseña incorrecta</p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var password = document.getElementById('password').value;
+            if (password === 'vitalis1') { // Cambia 'vitalis1' por la contraseña que desees
+                window.location.href = "secondary.html";
+            } else {
+                document.getElementById('error-message').classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
