@@ -1,0 +1,16 @@
+{
+  "name": "csocihc",
+  "productName": "csocihc",
+  "description": "My Electron application description",
+  "keywords": [],
+  "main": "./main.js",
+  "version": "1.0.0",
+  "author": "USER",
+  "scripts": {
+    "start": "electron ."
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "electron": "32.0.1"
+  }
+}
