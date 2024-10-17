@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400,600,700" rel="stylesheet">
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
     <link href="style-secondary.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         /* Estilos generales */
         body {
@@ -19,6 +20,7 @@
             color: #333;
             overflow-y: auto;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
         /* Barra de navegación superior */
@@ -49,6 +51,7 @@
             top: 0;
             overflow-y: auto;
             transition: all 0.3s ease;
+            z-index: 1000;
         }
 
         .sidebar-header {
@@ -95,10 +98,76 @@
 
         /* Contenedor principal */
         .main-container {
-            margin-left: 250px;
-            padding: 40px;
-            min-height: calc(100vh - 80px); /* Ajusta según la altura de tu navbar */
-            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            margin-left: 250px; /* Ajusta esto según el ancho de tu barra lateral izquierda */
+            padding: 20px;
+        }
+
+        .dashboard {
+            /* Mantén los estilos existentes para el cuadro de gráficos */
+            width: 100%;
+        }
+
+        .inventory-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            gap: 20px; /* Esto añade espacio entre el inventario y el panel de acciones */
+        }
+
+        .inventory-section {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            flex: 1; /* Esto permite que el inventario ocupe el espacio disponible */
+        }
+
+        .side-panel {
+            width: 220px; /* Ajusta este valor segn necesites */
+            background-color: #f8f9fc;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            align-self: flex-start;
+        }
+
+        .side-panel h3 {
+            color: #4e73df;
+            margin-bottom: 15px;
+        }
+
+        .panel-button {
+            display: block;
+            width: 100%;
+            padding: 10px 15px; /* Reducido el padding vertical */
+            margin-bottom: 10px; /* Reducido el margen inferior */
+            background-color: #295369;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 13px; /* Reducido el tamaño de la fuente */
+            font-weight: 600;
+            text-align: left;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .panel-button:hover {
+            background-color: #1e3d4f;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .panel-button:active {
+            transform: translateY(1px);
+        }
+
+        .panel-button i {
+            margin-right: 8px;
+            width: 16px;
+            text-align: center;
         }
 
         /* Estilos para las secciones */
@@ -166,50 +235,51 @@
         .inventory-table {
             width: 100%;
             border-collapse: collapse;
+            margin-top: 20px;
         }
 
         .inventory-table th, .inventory-table td {
-            padding: 15px;
+            padding: 12px;
             text-align: left;
             border-bottom: 1px solid #e0e0e0;
         }
 
         .inventory-table th {
-            background-color: #f0f3f7;
-            color: #295369;
+            background-color: #f8f9fc;
             font-weight: 600;
+            color: #295369;
         }
 
         .inventory-table tr:hover {
-            background-color: #f8f9fc;
+            background-color: #f5f5f5;
         }
 
-        .low-stock {
-            color: #e74c3c;
-            font-weight: bold;
-        }
-
-        .delete-btn, .edit-btn {
-            background-color: #e74a3b;
-            color: white;
+        .edit-btn, .delete-btn {
+            padding: 6px 10px;
+            margin: 2px;
             border: none;
-            padding: 5px 10px;
-            border-radius: 3px;
+            border-radius: 4px;
             cursor: pointer;
-            font-size: 14px;
-            margin-right: 5px;
+            font-size: 12px;
+            transition: background-color 0.3s;
         }
 
         .edit-btn {
             background-color: #4e73df;
-        }
-
-        .delete-btn:hover {
-            background-color: #c0392b;
+            color: white;
         }
 
         .edit-btn:hover {
             background-color: #2e59d9;
+        }
+
+        .delete-btn {
+            background-color: #e74a3b;
+            color: white;
+        }
+
+        .delete-btn:hover {
+            background-color: #be2617;
         }
 
         /* Estilos para el registro de movimientos */
@@ -287,6 +357,217 @@
             margin-bottom: 4px;
             display: block;
         }
+
+        /* Estilos para los modales */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 30px;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal h2 {
+            color: #295369;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: 700;
+            border-bottom: 2px solid #295369;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
+        }
+
+        .btn-primary {
+            background-color: #295369;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+            width: 100%; /* Hace que el botón ocupe todo el ancho */
+        }
+
+        .btn-primary:hover {
+            background-color: #1e3d4f;
+        }
+
+        /* Estilo para hacer el modal de historial más grande */
+        #modalHistorial .modal-content {
+            width: 80%;
+            max-width: 1000px;
+        }
+
+        .dashboard {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .chart-item {
+            text-align: center;
+        }
+        .pie-chart {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background-color: #e0e0e0;
+            position: relative;
+            overflow: hidden;
+            margin: 0 auto 10px;
+        }
+        .pie-slice {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            clip: rect(0, 150px, 150px, 75px);
+            transform-origin: 50% 50%;
+            transition: transform 0.3s ease;
+        }
+        .pie-slice::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: inherit;
+            transform-origin: 50% 50%;
+            transition: transform 0.3s ease;
+        }
+        .chart-item h4 {
+            margin: 0;
+            font-size: 14px;
+            color: #5a5c69;
+        }
+        .percent-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .form-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .half-width {
+            width: calc(50% - 10px);
+        }
+
+        .search-container {
+            margin-bottom: 20px;
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .sortable {
+            cursor: pointer;
+        }
+
+        .sortable:hover {
+            background-color: #f5f5f5;
+        }
+
+        .sortable::after {
+            content: '\25B2';
+            margin-left: 5px;
+            visibility: hidden;
+        }
+
+        .sortable.asc::after {
+            content: '\25B2';
+            visibility: visible;
+        }
+
+        .sortable.desc::after {
+            content: '\25BC';
+            visibility: visible;
+        }
+
+        .form-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .half-width {
+            width: calc(50% - 10px);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
     </style>
 </head>
 
@@ -304,49 +585,193 @@
         <ul class="sidebar-menu">
             <li><a href="secondary.html"><i class="fas fa-home"></i>Menú Principal</a></li>
             <li><a href="crear_historia_clinica.html"><i class="fas fa-file-medical"></i>Crear Historia Clínica</a></li>
-            <li><a href="inventario_materiales.html" class="active"><i class="fas fa-boxes"></i>Inventario de Materiales</a></li>
+            <li><a href="inventario_de_materiales.html" class="active"><i class="fas fa-boxes"></i>Inventario de Materiales</a></li>
             <li><a href="caja.html"><i class="fas fa-cash-register"></i>Caja</a></li>
             <li><a href="busqueda_de_pacientes.html"><i class="fas fa-search"></i>Búsqueda de Pacientes</a></li>
+            <li><a href="tratamientos.html"><i class="fas fa-tooth"></i>Tratamientos</a></li>
         </ul>
     </div>
 
-    <!-- Contenedor principal -->
+    <!-- Estructura principal -->
     <div class="main-container">
-        <!-- Sección de Agregar Material -->
-        <div class="section">
-            <h2>Agregar Nuevo Material</h2>
-            <form id="add-material-form" class="inline-form">
-                <div class="form-group">
-                    <label for="material-name">Nombre del Material</label>
-                    <input type="text" id="material-name" class="form-control" required>
+        <div class="dashboard">
+            <div class="chart-container">
+                <div id="pieMaterialMedico" class="pie-chart">
+                    <div class="pie-slice"></div>
                 </div>
-                <div class="form-group">
-                    <label for="material-quantity">Cantidad</label>
-                    <input type="number" id="material-quantity" class="form-control" required>
+                <p>Material Médico</p>
+            </div>
+            <div class="chart-container">
+                <div id="pieProductosHigiene" class="pie-chart">
+                    <div class="pie-slice"></div>
                 </div>
-                <div class="form-group">
-                    <label for="material-min-stock">Stock Mínimo</label>
-                    <input type="number" id="material-min-stock" class="form-control" required>
+                <p>Productos de Higiene</p>
+            </div>
+            <div class="chart-container">
+                <div id="pieMaterialQuirurgico" class="pie-chart">
+                    <div class="pie-slice"></div>
                 </div>
-                <button type="submit" class="btn">Agregar Material</button>
+                <p>Material Quirúrgico</p>
+            </div>
+            <div class="chart-container">
+                <div id="pieOtros" class="pie-chart">
+                    <div class="pie-slice"></div>
+                </div>
+                <p>Otros</p>
+            </div>
+        </div>
+        <div class="inventory-container">
+            <div class="inventory-section">
+                <h2>Inventario Actual</h2>
+                <div class="search-container">
+                    <input type="text" id="searchInput" placeholder="Buscar material...">
+                </div>
+                <table class="inventory-table">
+                    <thead>
+                        <tr>
+                            <th class="sortable" data-sort="name">Nombre del Material</th>
+                            <th class="sortable" data-sort="category">Tipo</th>
+                            <th class="sortable" data-sort="quantity">Cantidad</th>
+                            <th class="sortable" data-sort="minStock">Stock Mínimo</th>
+                            <th class="sortable" data-sort="consultorio">Consultorio</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventory-body">
+                        <!-- Los elementos del inventario se agregarán aquí dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="side-panel">
+                <h3>Acciones de Inventario</h3>
+                <button class="panel-button" id="btnNuevoProducto"><i class="fas fa-plus"></i> Agregar Nuevo Producto</button>
+                <button class="panel-button" id="btnAgregarStock"><i class="fas fa-arrow-up"></i> Agregar Stock</button>
+                <button class="panel-button" id="btnQuitarStock"><i class="fas fa-arrow-down"></i> Quitar Stock</button>
+                <button class="panel-button" id="btnHistorial"><i class="fas fa-history"></i> Historial</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modales -->
+    <div id="modalNuevoProducto" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Agregar Nuevo Producto</h2>
+            <form id="formNuevoProducto">
+                <div class="form-group">
+                    <label for="new-material-name">Nombre del Material</label>
+                    <input type="text" id="new-material-name" class="form-control" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group half-width">
+                        <label for="new-material-quantity">Cantidad Inicial</label>
+                        <input type="number" id="new-material-quantity" class="form-control" required min="0">
+                    </div>
+                    <div class="form-group half-width">
+                        <label for="new-material-min-stock">Stock Mínimo</label>
+                        <input type="number" id="new-material-min-stock" class="form-control" required min="0">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group half-width">
+                        <label for="new-material-category">Categoría</label>
+                        <select id="new-material-category" class="form-control" required>
+                            <option value="">Seleccione una categoría</option>
+                            <option value="Material Médico">Material Médico</option>
+                            <option value="Productos de Higiene">Productos de Higiene</option>
+                            <option value="Material Quirúrgico">Material Quirúrgico</option>
+                            <option value="Otros">Otros</option>
+                        </select>
+                    </div>
+                    <div class="form-group half-width">
+                        <label for="new-material-consultorio">Consultorio</label>
+                        <select id="new-material-consultorio" class="form-control" required>
+                            <option value="">Seleccione un consultorio</option>
+                            <option value="Consultorio 1">Consultorio 1</option>
+                            <option value="Consultorio 2">Consultorio 2</option>
+                            <option value="Consultorio 3">Consultorio 3</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Agregar Material</button>
             </form>
         </div>
+    </div>
 
-        <!-- Sección de Registro de Movimientos -->
-        <div class="section">
-            <h2>Registro de Movimientos</h2>
-            <form id="movement-form" class="movement-form">
-                <select id="material-select" class="form-control" required>
-                    <option value="">Seleccione un material</option>
-                </select>
-                <input type="number" id="movement-quantity" class="form-control" placeholder="Cantidad" required>
-                <select id="movement-type" class="form-control" required>
-                    <option value="entrada">Entrada</option>
-                    <option value="salida">Salida</option>
-                </select>
-                <input type="date" id="movement-date" class="form-control" required>
-                <button type="submit" class="btn">Registrar Movimiento</button>
+    <!-- Modal Agregar Stock -->
+    <div id="modalAgregarStock" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Agregar Stock</h2>
+            <form id="formAgregarStock">
+                <div class="form-group">
+                    <label for="stock-material-select">Material</label>
+                    <select id="stock-material-select" class="form-control" required>
+                        <option value="">Seleccione un material</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group half-width">
+                        <label for="stock-quantity">Cantidad</label>
+                        <input type="number" id="stock-quantity" class="form-control" required min="1">
+                    </div>
+                    <div class="form-group half-width">
+                        <label for="stock-date">Fecha</label>
+                        <input type="date" id="stock-date" class="form-control" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="stock-doctor">Doctor</label>
+                    <select id="stock-doctor" class="form-control" required>
+                        <option value="">Seleccione un doctor</option>
+                        <option value="Enmanuel Pacheco">Enmanuel Pacheco</option>
+                        <option value="Pilar Escobedo">Pilar Escobedo</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Agregar Stock</button>
             </form>
+        </div>
+    </div>
+
+    <!-- Modal Quitar Stock -->
+    <div id="modalQuitarStock" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Quitar Stock</h2>
+            <form id="formQuitarStock">
+                <div class="form-group">
+                    <label for="remove-stock-material-select">Material</label>
+                    <select id="remove-stock-material-select" class="form-control" required>
+                        <option value="">Seleccione un material</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group half-width">
+                        <label for="remove-stock-quantity">Cantidad</label>
+                        <input type="number" id="remove-stock-quantity" class="form-control" required min="1">
+                    </div>
+                    <div class="form-group half-width">
+                        <label for="remove-stock-date">Fecha</label>
+                        <input type="date" id="remove-stock-date" class="form-control" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="remove-stock-doctor">Doctor</label>
+                    <select id="remove-stock-doctor" class="form-control" required>
+                        <option value="">Seleccione un doctor</option>
+                        <option value="Enmanuel Pacheco">Enmanuel Pacheco</option>
+                        <option value="Pilar Escobedo">Pilar Escobedo</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Quitar Stock</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="modalHistorial" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Historial de Movimientos</h2>
             <table class="movement-table">
                 <thead>
                     <tr>
@@ -354,221 +779,416 @@
                         <th>Material</th>
                         <th>Tipo</th>
                         <th>Cantidad</th>
+                        <th>Doctor/Paciente</th>
+                        <th>Consultorio</th>
                     </tr>
                 </thead>
-                <tbody id="movement-body">
+                <tbody id="historial-body">
                     <!-- Los movimientos se agregarán aquí dinámicamente -->
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Sección de Inventario -->
-        <div class="section">
-            <h2>Inventario Actual</h2>
-            <table class="inventory-table">
-                <thead>
-                    <tr>
-                        <th>Nombre del Material</th>
-                        <th>Cantidad</th>
-                        <th>Stock Mínimo</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody id="inventory-body">
-                    <!-- Los materiales se agregarán aquí dinámicamente -->
                 </tbody>
             </table>
         </div>
     </div>
 
+    <div id="modalEditarProducto" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Editar Producto</h2>
+            <form id="formEditarProducto">
+                <input type="hidden" id="edit-material-index">
+                <div class="form-group">
+                    <label for="edit-material-name">Nombre del Material</label>
+                    <input type="text" id="edit-material-name" class="form-control" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group half-width">
+                        <label for="edit-material-quantity">Cantidad</label>
+                        <input type="number" id="edit-material-quantity" class="form-control" required min="0">
+                    </div>
+                    <div class="form-group half-width">
+                        <label for="edit-material-min-stock">Stock Mínimo</label>
+                        <input type="number" id="edit-material-min-stock" class="form-control" required min="0">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="edit-material-category">Categoría</label>
+                    <select id="edit-material-category" class="form-control" required>
+                        <option value="Material Médico">Material Médico</option>
+                        <option value="Productos de Higiene">Productos de Higiene</option>
+                        <option value="Material Quirúrgico">Material Quirúrgico</option>
+                        <option value="Otros">Otros</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+            </form>
+        </div>
+    </div>
+
     <script>
-        // Función para cargar los datos almacenados o inicializar si no existen
-        function loadInventory() {
-            return JSON.parse(localStorage.getItem('inventory')) || [];
+    document.addEventListener('DOMContentLoaded', function() {
+        let inventory = JSON.parse(localStorage.getItem('inventory')) || [];
+        let movements = JSON.parse(localStorage.getItem('movements')) || [];
+
+        function saveInventory(inv) {
+            localStorage.setItem('inventory', JSON.stringify(inv));
         }
 
-        // Función para guardar los datos
-        function saveInventory(inventory) {
-            localStorage.setItem('inventory', JSON.stringify(inventory));
+        function saveMovements(mov) {
+            localStorage.setItem('movements', JSON.stringify(mov));
         }
 
-        // Función para agregar un nuevo material a la tabla
-        function addMaterialToTable(material, index) {
-            const tbody = document.getElementById('inventory-body');
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${material.name}</td>
-                <td class="${material.quantity <= material.minStock ? 'low-stock' : ''}">${material.quantity}</td>
-                <td>${material.minStock}</td>
-                <td>
-                    <button class="edit-btn" data-index="${index}">Editar</button>
-                    <button class="delete-btn" data-index="${index}">Eliminar</button>
-                </td>
-            `;
-            tbody.appendChild(tr);
-        }
+        let currentSort = { column: null, direction: 'asc' };
 
-        // Función para renderizar todo el inventario
-        function renderInventory() {
+        function renderInventory(filteredInventory = inventory) {
             const tbody = document.getElementById('inventory-body');
             tbody.innerHTML = '';
-            inventory.forEach((material, index) => {
-                addMaterialToTable(material, index);
+            filteredInventory.forEach((material, index) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${material.name}</td>
+                    <td>${material.category}</td>
+                    <td>${material.quantity}</td>
+                    <td>${material.minStock}</td>
+                    <td>${material.consultorio}</td>
+                    <td>
+                        <button class="edit-btn" data-index="${index}">Editar</button>
+                        <button class="delete-btn" data-index="${index}">Eliminar</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
             });
-        }
 
-        // Función para cargar los movimientos almacenados o inicializar si no existen
-        function loadMovements() {
-            return JSON.parse(localStorage.getItem('movements')) || [];
-        }
-
-        // Función para guardar los movimientos
-        function saveMovements(movements) {
-            localStorage.setItem('movements', JSON.stringify(movements));
-        }
-
-        // Función para actualizar el select de materiales
-        function updateMaterialSelect() {
-            const select = document.getElementById('material-select');
-            select.innerHTML = '<option value="">Seleccione un material</option>';
-            inventory.forEach((material, index) => {
-                const option = document.createElement('option');
-                option.value = index;
-                option.textContent = material.name;
-                select.appendChild(option);
+            // Agregar event listeners a los botones de editar y eliminar
+            document.querySelectorAll('.edit-btn').forEach(button => {
+                button.addEventListener('click', editItem);
             });
-        }
-
-        // Función para agregar un nuevo movimiento a la tabla
-        function addMovementToTable(movement) {
-            const tbody = document.getElementById('movement-body');
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${movement.date}</td>
-                <td>${movement.materialName}</td>
-                <td class="${movement.type}">${movement.type}</td>
-                <td>${movement.quantity}</td>
-            `;
-            tbody.insertBefore(tr, tbody.firstChild);
-        }
-
-        // Función para renderizar todos los movimientos
-        function renderMovements() {
-            const tbody = document.getElementById('movement-body');
-            tbody.innerHTML = '';
-            movements.forEach(movement => {
-                addMovementToTable(movement);
+            document.querySelectorAll('.delete-btn').forEach(button => {
+                button.addEventListener('click', deleteItem);
             });
+
+            updateCharts();
         }
 
-        // Cargar inventario y movimientos al iniciar la página
-        let inventory = loadInventory();
-        let movements = loadMovements();
-        renderInventory();
-        renderMovements();
-        updateMaterialSelect();
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+        }
 
-        // Manejar el formulario de agregar material
-        document.getElementById('add-material-form').addEventListener('submit', function(e) {
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Event listeners para abrir modales
+        document.getElementById('btnNuevoProducto').addEventListener('click', () => openModal('modalNuevoProducto'));
+        document.getElementById('btnAgregarStock').addEventListener('click', function() {
+            updateMaterialSelects(); // Actualizar las opciones antes de abrir el modal
+            openModal('modalAgregarStock');
+        });
+        document.getElementById('btnQuitarStock').addEventListener('click', function() {
+            updateMaterialSelects(); // Actualizar las opciones antes de abrir el modal
+            openModal('modalQuitarStock');
+        });
+        document.getElementById('btnHistorial').addEventListener('click', function() {
+            renderHistorial();
+            openModal('modalHistorial');
+        });
+
+        // Cerrar modales al hacer clic en la 'x'
+        document.querySelectorAll('.close').forEach(closeBtn => {
+            closeBtn.addEventListener('click', () => closeModal(closeBtn.closest('.modal').id));
+        });
+
+        // Manejar el formulario de nuevo producto
+        document.getElementById('formNuevoProducto').addEventListener('submit', function(e) {
             e.preventDefault();
-            const name = document.getElementById('material-name').value;
-            const quantity = parseInt(document.getElementById('material-quantity').value);
-            const minStock = parseInt(document.getElementById('material-min-stock').value);
+            const name = document.getElementById('new-material-name').value;
+            const quantity = parseInt(document.getElementById('new-material-quantity').value);
+            const minStock = parseInt(document.getElementById('new-material-min-stock').value);
+            const category = document.getElementById('new-material-category').value;
+            const consultorio = document.getElementById('new-material-consultorio').value;
+            const date = new Date().toISOString().split('T')[0]; // Fecha actual en formato YYYY-MM-DD
 
-            const material = { name, quantity, minStock };
+            const material = { name, quantity, minStock, category, consultorio };
             inventory.push(material);
 
+            // Agregar movimiento al historial
+            addMovement(date, name, 'Nuevo', quantity, '', consultorio);
+
             saveInventory(inventory);
             renderInventory();
-            updateMaterialSelect();
+            updateMaterialSelects();
+            updateCharts();
 
             this.reset();
+            closeModal('modalNuevoProducto');
         });
 
-        // Manejar el formulario de registro de movimientos
-        document.getElementById('movement-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const materialIndex = document.getElementById('material-select').value;
-            const quantity = parseInt(document.getElementById('movement-quantity').value);
-            const type = document.getElementById('movement-type').value;
-            const date = document.getElementById('movement-date').value;
+        // ... (resto de las funciones y event listeners) ...
 
-            if (materialIndex === '') {
-                alert('Por favor, seleccione un material');
-                return;
-            }
-
-            const material = inventory[materialIndex];
-            const movement = {
-                date,
-                materialName: material.name,
-                type,
-                quantity
+        function updateCharts() {
+            const categories = {
+                'Material Médico': { currentStock: 0, minStock: 0 },
+                'Productos de Higiene': { currentStock: 0, minStock: 0 },
+                'Material Quirúrgico': { currentStock: 0, minStock: 0 },
+                'Otros': { currentStock: 0, minStock: 0 }
             };
 
-            // Actualizar la cantidad en el inventario
-            if (type === 'entrada') {
-                material.quantity += quantity;
-            } else {
-                if (material.quantity < quantity) {
-                    alert('No hay suficiente stock para esta salida');
-                    return;
-                }
-                material.quantity -= quantity;
+            inventory.forEach(item => {
+                const category = categories[item.category] || categories['Otros'];
+                category.currentStock += item.quantity;
+                category.minStock += item.minStock;
+            });
+
+            function calculateCategoryPercentage(category) {
+                if (category.currentStock === 0) return 0;
+                const minStockPercentage = 20; // El stock mínimo representa el 20% del gráfico
+                const currentStockPercentage = (category.currentStock - category.minStock) / (category.minStock * 4) * 100;
+                return Math.max(Math.min(currentStockPercentage + minStockPercentage, 100), minStockPercentage);
             }
 
-            movements.unshift(movement);
-            saveMovements(movements);
-            saveInventory(inventory);
-            renderInventory();
-            renderMovements();
-            this.reset();
-        });
+            function updatePieChart(id, percentage) {
+                const pieSlice = document.querySelector(`#${id} .pie-slice`);
+                const degrees = (percentage / 100) * 360;
+                pieSlice.style.transform = `rotate(${degrees}deg)`;
+                
+                let color;
+                if (percentage >= 75) {
+                    color = '#1cc88a'; // Verde
+                } else if (percentage >= 50) {
+                    color = '#f6c23e'; // Amarillo
+                } else {
+                    color = '#e74a3b'; // Rojo
+                }
+                pieSlice.style.backgroundColor = color;
 
-        // Manejar la edición y eliminación de materiales
-        document.getElementById('inventory-body').addEventListener('click', function(e) {
-            if (e.target.classList.contains('delete-btn')) {
-                const index = parseInt(e.target.getAttribute('data-index'));
+                const container = document.getElementById(id);
+                let percentText = container.querySelector('.percent-text');
+                if (!percentText) {
+                    percentText = document.createElement('div');
+                    percentText.className = 'percent-text';
+                    container.appendChild(percentText);
+                }
+                percentText.textContent = `${Math.round(percentage)}%`;
+            }
+
+            updatePieChart('pieMaterialMedico', calculateCategoryPercentage(categories['Material Médico']));
+            updatePieChart('pieProductosHigiene', calculateCategoryPercentage(categories['Productos de Higiene']));
+            updatePieChart('pieMaterialQuirurgico', calculateCategoryPercentage(categories['Material Quirúrgico']));
+            updatePieChart('pieOtros', calculateCategoryPercentage(categories['Otros']));
+        }
+
+        function renderHistorial() {
+            const tbody = document.getElementById('historial-body');
+            tbody.innerHTML = '';
+            movements.forEach(movement => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${movement.date}</td>
+                    <td>${movement.material}</td>
+                    <td>${movement.type}</td>
+                    <td>${movement.quantity}</td>
+                    <td>${movement.doctor || '-'}</td>
+                    <td>${movement.consultorio}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function editItem(e) {
+            const index = e.target.dataset.index;
+            const item = inventory[index];
+            
+            // Llenar el modal de edición con los datos del item
+            document.getElementById('edit-material-name').value = item.name;
+            document.getElementById('edit-material-quantity').value = item.quantity;
+            document.getElementById('edit-material-min-stock').value = item.minStock;
+            document.getElementById('edit-material-category').value = item.category;
+            
+            // Guardar el índice del item que se está editando
+            document.getElementById('edit-material-index').value = index;
+            
+            // Abrir el modal de edición
+            openModal('modalEditarProducto');
+        }
+
+        function deleteItem(e) {
+            const index = e.target.dataset.index;
+            if (confirm('¿Está seguro de que desea eliminar este producto?')) {
                 inventory.splice(index, 1);
                 saveInventory(inventory);
                 renderInventory();
-                updateMaterialSelect();
-            } else if (e.target.classList.contains('edit-btn')) {
-                const index = parseInt(e.target.getAttribute('data-index'));
-                const material = inventory[index];
-                document.getElementById('material-name').value = material.name;
-                document.getElementById('material-quantity').value = material.quantity;
-                document.getElementById('material-min-stock').value = material.minStock;
+                updateMaterialSelects();
+                updateCharts();
+            }
+        }
+
+        function searchInventory() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const filteredInventory = inventory.filter(material => 
+                material.name.toLowerCase().includes(searchTerm) ||
+                material.category.toLowerCase().includes(searchTerm) ||
+                material.consultorio.toLowerCase().includes(searchTerm)
+            );
+            renderInventory(filteredInventory);
+        }
+
+        function sortInventory(column) {
+            if (currentSort.column === column) {
+                currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSort.column = column;
+                currentSort.direction = 'asc';
+            }
+
+            inventory.sort((a, b) => {
+                if (a[column] < b[column]) return currentSort.direction === 'asc' ? -1 : 1;
+                if (a[column] > b[column]) return currentSort.direction === 'asc' ? 1 : -1;
+                return 0;
+            });
+
+            if (column === 'quantity' || column === 'minStock') {
+                inventory.sort((a, b) => currentSort.direction === 'asc' ? a[column] - b[column] : b[column] - a[column]);
+            }
+
+            renderInventory();
+            updateSortIndicators();
+        }
+
+        function updateSortIndicators() {
+            document.querySelectorAll('.sortable').forEach(th => {
+                th.classList.remove('asc', 'desc');
+                if (th.dataset.sort === currentSort.column) {
+                    th.classList.add(currentSort.direction);
+                }
+            });
+        }
+
+        // Agregar event listeners
+        document.getElementById('searchInput').addEventListener('input', searchInventory);
+
+        document.querySelectorAll('.sortable').forEach(th => {
+            th.addEventListener('click', () => sortInventory(th.dataset.sort));
+        });
+
+        // ... (otros event listeners existentes)
+
+        // Inicializar la página
+        renderInventory();
+        updateMaterialSelects();
+        updateCharts();
+
+        // Función para actualizar los selectores de materiales
+        function updateMaterialSelects() {
+            const stockSelect = document.getElementById('stock-material-select');
+            const removeStockSelect = document.getElementById('remove-stock-material-select');
+            
+            // Limpiar las opciones existentes
+            stockSelect.innerHTML = '<option value="">Seleccione un material</option>';
+            removeStockSelect.innerHTML = '<option value="">Seleccione un material</option>';
+            
+            // Agregar una opción por cada material en el inventario
+            inventory.forEach((material, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = `${material.name} - ${material.category} (${material.consultorio})`;
                 
-                // Cambiar el botón de "Agregar" a "Actualizar"
-                const submitBtn = document.querySelector('#add-material-form button[type="submit"]');
-                submitBtn.textContent = 'Actualizar Material';
-                submitBtn.setAttribute('data-edit-index', index);
+                stockSelect.appendChild(option.cloneNode(true));
+                removeStockSelect.appendChild(option);
+            });
+        }
+
+        // Función para agregar un movimiento al historial
+        function addMovement(date, material, type, quantity, doctor, consultorio) {
+            const movement = {
+                date,
+                material,
+                type,
+                quantity,
+                doctor,
+                consultorio
+            };
+            movements.push(movement);
+            saveMovements(movements);
+        }
+
+        // Event listener para el formulario de agregar stock
+        document.getElementById('formAgregarStock').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const materialIndex = document.getElementById('stock-material-select').value;
+            const quantity = parseInt(document.getElementById('stock-quantity').value);
+            const date = document.getElementById('stock-date').value;
+            const doctor = document.getElementById('stock-doctor').value;
+
+            if (materialIndex !== "" && doctor !== "") {
+                const material = inventory[materialIndex];
+                material.quantity += quantity;
+                
+                // Agregar movimiento al historial
+                addMovement(date, material.name, 'Entrada', quantity, doctor, material.consultorio);
+
+                saveInventory(inventory);
+                renderInventory();
+                updateCharts();
+                updateMaterialSelects();
+                closeModal('modalAgregarStock');
+                this.reset();
+            } else {
+                alert('Por favor, seleccione un material y un doctor.');
             }
         });
 
-        // Manejar la actualización de materiales
-        document.getElementById('add-material-form').addEventListener('submit', function(e) {
-            const submitBtn = document.querySelector('#add-material-form button[type="submit"]');
-            const editIndex = submitBtn.getAttribute('data-edit-index');
-            
-            if (editIndex !== null) {
-                e.preventDefault();
-                const index = parseInt(editIndex);
-                inventory[index] = {
-                    name: document.getElementById('material-name').value,
-                    quantity: parseInt(document.getElementById('material-quantity').value),
-                    minStock: parseInt(document.getElementById('material-min-stock').value)
-                };
-                saveInventory(inventory);
-                renderInventory();
-                updateMaterialSelect();
-                this.reset();
-                submitBtn.textContent = 'Agregar Material';
-                submitBtn.removeAttribute('data-edit-index');
+        // Event listener para el formulario de quitar stock
+        document.getElementById('formQuitarStock').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const materialIndex = document.getElementById('remove-stock-material-select').value;
+            const quantity = parseInt(document.getElementById('remove-stock-quantity').value);
+            const date = document.getElementById('remove-stock-date').value;
+            const doctor = document.getElementById('remove-stock-doctor').value;
+
+            if (materialIndex !== "" && doctor !== "") {
+                const material = inventory[materialIndex];
+                if (material.quantity >= quantity) {
+                    material.quantity -= quantity;
+                    
+                    // Agregar movimiento al historial
+                    addMovement(date, material.name, 'Salida', quantity, doctor, material.consultorio);
+
+                    saveInventory(inventory);
+                    renderInventory();
+                    updateCharts();
+                    updateMaterialSelects();
+                    closeModal('modalQuitarStock');
+                    this.reset();
+                } else {
+                    alert('No hay suficiente stock para realizar esta operación.');
+                }
+            } else {
+                alert('Por favor, seleccione un material y un doctor.');
             }
         });
+
+        // Inicializar selectores de materiales
+        updateMaterialSelects();
+    });
+
+    document.getElementById('formEditarProducto').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const index = document.getElementById('edit-material-index').value;
+        const name = document.getElementById('edit-material-name').value;
+        const quantity = parseInt(document.getElementById('edit-material-quantity').value);
+        const minStock = parseInt(document.getElementById('edit-material-min-stock').value);
+        const category = document.getElementById('edit-material-category').value;
+
+        inventory[index] = { name, quantity, minStock, category };
+
+        saveInventory(inventory);
+        renderInventory();
+        updateMaterialSelects();
+        updateCharts();
+
+        closeModal('modalEditarProducto');
+    });
     </script>
+
 </body>
 
 </html>
