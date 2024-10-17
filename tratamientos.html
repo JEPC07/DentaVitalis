@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Tratamientos - DentaVitalis</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,300,400,600,700" rel="stylesheet">
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="style-secondary.css" rel="stylesheet">
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f0f3f7;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            overflow-y: auto;
+            min-height: 100vh;
+        }
+
+        /* Barra de navegación superior */
+        .navbar {
+            background-color: #295369;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .navbar h2 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        /* Barra de navegación lateral */
+        .sidebar {
+            width: 250px;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px 0;
+            height: 100%;
+            position: fixed;
+            left: 0;
+            top: 0;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-header {
+            text-align: center;
+            padding: 20px 0;
+            background-color: #34495e;
+        }
+
+        .sidebar-header h2 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar-menu a {
+            color: #ecf0f1;
+            text-decoration: none;
+            display: block;
+            padding: 12px 20px;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background-color: #34495e;
+            border-left-color: #3498db;
+        }
+
+        .sidebar-menu i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Contenedor principal */
+        .main-container {
+            margin-left: 250px;
+            padding: 40px;
+            min-height: calc(100vh - 80px);
+            overflow-y: auto;
+        }
+
+        /* Estilos para la página de tratamientos */
+        .tratamientos-container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .tratamientos-container h2 {
+            color: #295369;
+            margin-bottom: 20px;
+        }
+
+        .tratamientos-container form {
+            display: grid;
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .form-group textarea {
+            height: 100px;
+        }
+
+        #historial-tratamientos {
+            margin-top: 30px;
+        }
+
+        #historial-tratamientos h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        /* Estilo para los tratamientos en el historial */
+        .tratamiento-item {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .tratamiento-item h4 {
+            margin: 0 0 10px 0;
+            color: var(--primary-color);
+        }
+
+        .tratamiento-item p {
+            margin: 5px 0;
+        }
+
+        .tratamiento-item img {
+            max-width: 100%;
+            height: auto;
+            margin-top: 10px;
+        }
+
+        /* Estilo para el mensaje de éxito */
+        .mensaje-exito {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .mensaje-contenido {
+            background-color: #fff;
+            padding: 30px 50px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .mensaje-contenido i {
+            font-size: 48px;
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+
+        .mensaje-contenido p {
+            font-size: 24px;
+            color: #333;
+            margin: 0;
+        }
+
+        .btn-borrar {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .btn-borrar:hover {
+            background-color: #ff3333;
+        }
+
+        /* Estilos para la tabla de tratamientos */
+        .tratamientos-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .tratamientos-table th,
+        .tratamientos-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .tratamientos-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        .tratamientos-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .tratamientos-table tr:hover {
+            background-color: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+    <!-- Barra de navegación superior -->
+    <div class="navbar">
+        <h2>Gestión de Tratamientos</h2>
+    </div>
+
+    <!-- Barra de navegación lateral -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2><i class="fas fa-tooth"></i> DentaVitalis</h2>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="secondary.html"><i class="fas fa-home"></i>Menú Principal</a></li>
+            <li><a href="crear_historia_clinica.html"><i class="fas fa-file-medical"></i>Crear Historia Clínica</a></li>
+            <li><a href="inventario_de_materiales.html"><i class="fas fa-boxes"></i>Inventario de Materiales</a></li>
+            <li><a href="caja.html"><i class="fas fa-cash-register"></i>Caja</a></li>
+            <li><a href="busqueda_de_pacientes.html"><i class="fas fa-search"></i>Búsqueda de Pacientes</a></li>
+            <li><a href="tratamientos.html" class="active"><i class="fas fa-tooth"></i>Tratamientos</a></li>
+        </ul>
+    </div>
+
+    <!-- Contenedor principal -->
+    <div class="main-container">
+        <div class="tratamientos-container">
+            <h2><i class="fas fa-tooth"></i> Gestión de Tratamientos</h2>
+            <form id="tratamiento-form">
+                <div class="form-group">
+                    <label for="paciente-select">Paciente:</label>
+                    <select id="paciente-select" required>
+                        <option value="">Seleccione un paciente</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="fecha-tratamiento">Fecha del tratamiento:</label>
+                    <input type="date" id="fecha-tratamiento" required>
+                </div>
+                <div class="form-group">
+                    <label for="tipo-tratamiento">Tipo de tratamiento:</label>
+                    <input type="text" id="tipo-tratamiento" placeholder="Ej: Limpieza dental, Extracción" required>
+                </div>
+                <div class="form-group">
+                    <label for="descripcion-tratamiento">Descripción del tratamiento:</label>
+                    <textarea id="descripcion-tratamiento" placeholder="Detalles del tratamiento realizado"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="odontograma">Odontograma:</label>
+                    <input type="file" id="odontograma" accept="image/*">
+                </div>
+                <div class="form-group">
+                    <label for="fotos-tratamiento">Fotos del tratamiento:</label>
+                    <input type="file" id="fotos-tratamiento" accept="image/*" multiple>
+                </div>
+                <div class="form-group">
+                    <label for="costo-tratamiento">Costo del tratamiento:</label>
+                    <input type="number" id="costo-tratamiento" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="cobrado-tratamiento">Monto cobrado:</label>
+                    <input type="number" id="cobrado-tratamiento" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="doctor-tratamiento">Doctor que atendió:</label>
+                    <input type="text" id="doctor-tratamiento" required>
+                </div>
+                <div class="form-group">
+                    <label for="pago-tratamiento">Pago:</label>
+                    <select id="pago-tratamiento" required>
+                        <option value="Efectivo">Efectivo</option>
+                        <option value="Tarjeta">Tarjeta</option>
+                        <option value="Transferencia">Transferencia</option>
+                        <option value="Pendiente">Pendiente</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-save">Guardar Tratamiento</button>
+            </form>
+            <div id="historial-tratamientos">
+                <h3>Historial de Tratamientos</h3>
+                <!-- Aquí se mostrará el historial de tratamientos -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Reemplaza el div del mensaje de éxito existente por este -->
+    <div id="mensaje-exito" class="mensaje-exito" style="display: none;">
+        <div class="mensaje-contenido">
+            <i class="fas fa-check-circle"></i>
+            <p>Guardado exitosamente</p>
+        </div>
+    </div>
+
+    <script>
+        console.log('Script iniciado');
+
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOMContentLoaded event fired');
+            cargarPacientes();
+            document.getElementById('tratamiento-form').addEventListener('submit', guardarTratamiento);
+            document.getElementById('paciente-select').addEventListener('change', cargarHistorialTratamientos);
+        });
+
+        function cargarPacientes() {
+            console.log('Cargando pacientes');
+            const historiasClinicas = JSON.parse(localStorage.getItem('historiasClinicas')) || [];
+            console.log('Historias clínicas cargadas:', historiasClinicas);
+            const selectPaciente = document.getElementById('paciente-select');
+            selectPaciente.innerHTML = '<option value="">Seleccione un paciente</option>';
+            
+            historiasClinicas.forEach((paciente, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = `${paciente.nombre} ${paciente.apellido}`;
+                selectPaciente.appendChild(option);
+            });
+            console.log('Pacientes cargados en el select');
+        }
+
+        function guardarTratamiento(event) {
+            console.log('Intentando guardar tratamiento');
+            event.preventDefault();
+            const pacienteIndex = document.getElementById('paciente-select').value;
+            console.log('Índice del paciente seleccionado:', pacienteIndex);
+            if (!pacienteIndex) {
+                alert('Por favor, seleccione un paciente');
+                return;
+            }
+
+            const nuevoTratamiento = {
+                fecha: document.getElementById('fecha-tratamiento').value,
+                tipo: document.getElementById('tipo-tratamiento').value,
+                descripcion: document.getElementById('descripcion-tratamiento').value,
+                doctor: document.getElementById('doctor-tratamiento').value,
+                costo: parseFloat(document.getElementById('costo-tratamiento').value),
+                cobrado: parseFloat(document.getElementById('cobrado-tratamiento').value),
+                pago: document.getElementById('pago-tratamiento').value
+            };
+            console.log('Nuevo tratamiento:', nuevoTratamiento);
+
+            nuevoTratamiento.deuda = nuevoTratamiento.costo - nuevoTratamiento.cobrado;
+
+            const historiasClinicas = JSON.parse(localStorage.getItem('historiasClinicas')) || [];
+            console.log('Historias clínicas antes de guardar:', historiasClinicas);
+            const paciente = historiasClinicas[pacienteIndex];
+            
+            if (!paciente.tratamientos) {
+                paciente.tratamientos = [];
+            }
+
+            paciente.tratamientos.push(nuevoTratamiento);
+            localStorage.setItem('historiasClinicas', JSON.stringify(historiasClinicas));
+            console.log('Tratamiento guardado. Historias clínicas actualizadas:', historiasClinicas);
+            
+            mostrarMensajeExito();
+            document.getElementById('tratamiento-form').reset();
+            cargarHistorialTratamientos();
+        }
+
+        function mostrarMensajeExito(mensaje = 'Guardado exitosamente') {
+            const mensajeExito = document.getElementById('mensaje-exito');
+            mensajeExito.querySelector('p').textContent = mensaje;
+            mensajeExito.style.display = 'flex';
+            setTimeout(() => {
+                mensajeExito.style.display = 'none';
+            }, 3000); // El mensaje desaparecerá después de 3 segundos
+        }
+
+        function cargarHistorialTratamientos() {
+            console.log('Cargando historial de tratamientos');
+            const pacienteIndex = document.getElementById('paciente-select').value;
+            const historialContainer = document.getElementById('historial-tratamientos');
+            
+            if (!pacienteIndex) {
+                historialContainer.innerHTML = '<h3>Historial de Tratamientos</h3><p>Seleccione un paciente para ver su historial de tratamientos.</p>';
+                return;
+            }
+
+            const historiasClinicas = JSON.parse(localStorage.getItem('historiasClinicas')) || [];
+            const paciente = historiasClinicas[pacienteIndex];
+            console.log('Paciente seleccionado:', paciente);
+            
+            if (paciente && paciente.tratamientos && paciente.tratamientos.length > 0) {
+                let historialHTML = `
+                    <h3>Historial de Tratamientos</h3>
+                    <table class="tratamientos-table">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Tratamiento</th>
+                                <th>Descripción</th>
+                                <th>Doctor</th>
+                                <th>Costo</th>
+                                <th>Cobrado</th>
+                                <th>Deuda</th>
+                                <th>Pago</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                paciente.tratamientos.forEach((tratamiento, index) => {
+                    historialHTML += `
+                        <tr>
+                            <td>${tratamiento.fecha}</td>
+                            <td>${tratamiento.tipo}</td>
+                            <td>${tratamiento.descripcion}</td>
+                            <td>${tratamiento.doctor || 'No especificado'}</td>
+                            <td>$${tratamiento.costo.toFixed(2)}</td>
+                            <td>$${tratamiento.cobrado.toFixed(2)}</td>
+                            <td>$${tratamiento.deuda.toFixed(2)}</td>
+                            <td>${tratamiento.pago || 'No especificado'}</td>
+                            <td>
+                                <button class="btn-borrar" onclick="borrarTratamiento(${pacienteIndex}, ${index})">Borrar</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                historialHTML += `
+                        </tbody>
+                    </table>
+                `;
+                historialContainer.innerHTML = historialHTML;
+            } else {
+                historialContainer.innerHTML = '<h3>Historial de Tratamientos</h3><p>No hay tratamientos registrados para este paciente.</p>';
+            }
+            console.log('Historial de tratamientos cargado');
+        }
+
+        function borrarTratamiento(pacienteIndex, tratamientoIndex) {
+            const historiasClinicas = JSON.parse(localStorage.getItem('historiasClinicas')) || [];
+            const paciente = historiasClinicas[pacienteIndex];
+            
+            if (confirm('¿Está seguro de que desea borrar este tratamiento?')) {
+                paciente.tratamientos.splice(tratamientoIndex, 1);
+                localStorage.setItem('historiasClinicas', JSON.stringify(historiasClinicas));
+                cargarHistorialTratamientos();
+                mostrarMensajeExito('Tratamiento borrado exitosamente');
+            }
+        }
+    </script>
+</body>
+</html>
