@@ -99,56 +99,94 @@
 
         /* Estilos para el formulario de búsqueda */
         .search-container {
-            background-color: #fff;
-            padding: 30px;
+            background-color: #ffffff;
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            margin-bottom: 30px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            padding: 30px 40px;
+            width: 600px;
+            margin: 50px auto;
+            transition: all 0.3s ease;
         }
 
-        .search-container h2 {
+        .search-container:hover {
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .search-container h1 {
             color: #295369;
-            margin-bottom: 30px;
-            font-size: 24px;
-            font-weight: 700;
-            border-bottom: 2px solid #295369;
-            padding-bottom: 15px;
+            font-size: 28px;
+            margin-bottom: 25px;
+            text-align: center;
+            font-weight: 600;
         }
 
         .search-form {
             display: flex;
-            gap: 20px;
+            align-items: center;
+            background-color: #f8f9fa;
+            border-radius: 50px;
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
         }
 
         .search-input {
             flex-grow: 1;
-            padding: 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
+            padding: 14px 25px;
+            border: none;
+            background: transparent;
             font-size: 16px;
-            transition: all 0.3s ease;
+            color: #495057;
         }
 
-        .search-input:focus {
-            border-color: #295369;
-            box-shadow: 0 0 0 3px rgba(41, 83, 105, 0.1);
-            outline: none;
+        .search-input::placeholder {
+            color: #adb5bd;
         }
 
         .search-button {
-            background-color: #295369;
+            background-color: #6c757d;
             color: white;
             border: none;
-            padding: 15px 30px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: bold;
+            padding: 14px 25px;
             font-size: 16px;
-            transition: all 0.3s ease;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            border-radius: 0 50px 50px 0;
         }
 
         .search-button:hover {
-            background-color: #1d3c50;
+            background-color: #5a6268;
+        }
+
+        .search-button i {
+            margin-right: 8px;
+        }
+
+        .suggestions {
+            margin-top: 10px;
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .suggestion-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .suggestion-item:hover {
+            background-color: #f5f5f5;
         }
 
         /* Estilos para la tabla de resultados */
@@ -478,6 +516,380 @@
             z-index: 1000;
             display: none;
         }
+
+        /* Estilos para la tabla de tratamientos */
+        .tratamientos-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .tratamientos-table th,
+        .tratamientos-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .tratamientos-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        .tratamientos-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .tratamientos-table tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        /* Estilos para el formulario de búsqueda centrado */
+        .search-container {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Estilos para las sugerencias de búsqueda */
+        .suggestions {
+            margin-top: 10px;
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .suggestion-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .suggestion-item:hover {
+            background-color: #f5f5f5;
+        }
+
+        .content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: calc(100vh - 60px); /* Ajusta esto según la altura de tu barra superior */
+            background-color: #f0f3f7;
+        }
+
+        .page-title {
+            color: #4a4a4a;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .search-form {
+            width: 100%;
+        }
+
+        .input-group {
+            display: flex;
+            width: 100%;
+        }
+
+        .search-input {
+            flex-grow: 1;
+            padding: 12px 16px;
+            font-size: 16px;
+            border: 1px solid #ced4da;
+            border-right: none;
+            border-radius: 4px 0 0 4px;
+        }
+
+        .search-button {
+            padding: 12px 24px;
+            font-size: 16px;
+            background-color: #6c757d;
+            color: white;
+            border: 1px solid #6c757d;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+        }
+
+        .search-button:hover {
+            background-color: #5a6268;
+        }
+
+        /* Estilos para el modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Estilos para el nuevo modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.7);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 40px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 800px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .paciente-info {
+            margin-top: 20px;
+        }
+
+        .paciente-info p {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .paciente-info strong {
+            font-weight: bold;
+            color: #295369;
+        }
+
+        .logo {
+            display: block;
+            width: 100px; /* Ajusta el tamaño según sea necesario */
+            height: auto;
+            margin: 0 auto 20px;
+        }
+
+        .paciente-detalle-modal {
+            padding-top: 30px;
+        }
+
+        .paciente-detalle-content {
+            width: 95%; /* Aumentado de 90% a 95% */
+            max-width: 1400px; /* Aumentado de 1200px a 1400px */
+            height: 90vh;
+            margin: 0 auto;
+            overflow-y: auto;
+            background-color: #f0f3f7;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .paciente-header {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .paciente-foto {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 20px;
+        }
+
+        .paciente-info-basica {
+            flex-grow: 1;
+        }
+
+        .paciente-info-basica h2 {
+            margin: 0;
+            color: #333;
+            font-size: 24px;
+        }
+
+        .paciente-info-basica p {
+            margin: 5px 0;
+            color: #666;
+        }
+
+        .iniciar-consulta {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .paciente-detalles {
+            display: flex;
+            gap: 20px;
+            flex-wrap: nowrap; /* Asegura que los elementos no se envuelvan */
+        }
+
+        .signos-vitales, .antecedentes {
+            flex: 1;
+            min-width: 0; /* Permite que los elementos se reduzcan si es necesario */
+        }
+
+        .signos-vitales h3, .antecedentes h3, .archivos h3, .citas h3 {
+            color: #333;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+
+        #signosVitales div, #antecedentesPatologicos div, #antecedentesHereditarios div {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .agregar-antecedente {
+            background-color: transparent;
+            border: 2px dashed #ccc;
+            color: #666;
+            padding: 10px;
+            margin-top: 10px;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+        }
+
+        .archivos, .citas {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        #archivosLista div, #citasAgendadas div, #citasPasadas div {
+            background-color: #f9f9f9;
+            padding: 10px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+        }
+
+        .paciente-nav {
+            display: flex;
+            background-color: #f0f3f7;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .nav-button {
+            flex: 1;
+            padding: 12px 15px;
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: #295369;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-button:hover {
+            background-color: #e0e5eb;
+        }
+
+        .nav-button.active {
+            background-color: #295369;
+            color: #fff;
+        }
+
+        /* Añadir un borde suave entre los botones */
+        .nav-button:not(:last-child) {
+            border-right: 1px solid #d1d9e6;
+        }
+
+        /* Ajustar el espaciado del contenido del modal */
+        .paciente-detalle-content {
+            padding: 30px;
+        }
+
+        /* Mejorar el aspecto del encabezado del paciente */
+        .paciente-header {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .section-content {
+            display: none;
+        }
+
+        .section-content.active {
+            display: block;
+        }
     </style>
 </head>
 
@@ -498,711 +910,212 @@
             <li><a href="inventario_de_materiales.html"><i class="fas fa-boxes"></i>Inventario de Materiales</a></li>
             <li><a href="caja.html"><i class="fas fa-cash-register"></i>Caja</a></li>
             <li><a href="busqueda_de_pacientes.html" class="active"><i class="fas fa-search"></i>Búsqueda de Pacientes</a></li>
+            <li><a href="tratamientos.html"><i class="fas fa-tooth"></i>Tratamientos</a></li>
         </ul>
     </div>
 
     <!-- Contenedor principal -->
     <div class="main-container">
-        <!-- Contenedor de búsqueda -->
-        <div class="search-container">
-            <h2>Buscar Paciente</h2>
-            <form class="search-form">
-                <input type="text" class="search-input" placeholder="Ingrese nombre, apellido o DNI del paciente">
-                <button type="submit" class="search-button">Buscar</button>
-            </form>
-        </div>
-
-        <!-- Contenedor de resultados -->
-        <div class="results-container">
-            <h2>Resultados de la Búsqueda</h2>
-            <table class="results-table">
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Apellido</th>
-                        <th>DNI</th>
-                        <th>Fecha de Nacimiento</th>
-                        <th>Teléfono</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>${paciente.nombre}</td>
-                        <td>${paciente.apellido}</td>
-                        <td>${paciente.fechaNacimiento}</td>
-                        <td>${paciente.telefono}</td>
-                        <td>${paciente.email}</td>
-                        <td>
-                            <button class="action-button" onclick="verHistoria(${index})">Ver Historia</button>
-                            <button class="action-button" onclick="editarPaciente(${index})">Editar</button>
-                            <button class="action-button delete-button" onclick="eliminarPaciente(${index})">Eliminar</button>
-                        </td>
-                    </tr>
-                    <!-- Agrega más filas según sea necesario -->
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- Añade este div al final del body, justo antes del cierre -->
-    <div id="historiaClinicaModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <div id="historiaClinicaContenido" class="historia-clinica"></div>
-        </div>
-    </div>
-
-    <!-- Añade este div al final del body, justo antes del cierre -->
-    <div id="editarHistoriaModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <div id="editarHistoriaContenido" class="historia-clinica">
-                <h2>Editar Historia Clínica</h2>
-                <form id="editarHistoriaForm">
-                    <!-- El contenido del formulario se generará dinámicamente -->
+        <div class="content">
+            <div class="search-container">
+                <h1 class="page-title">Búsqueda de Pacientes</h1>
+                <img src="logo.png" alt="Logo DentaVitalis" class="logo">
+                <form class="search-form" onsubmit="buscarPaciente(); return false;">
+                    <input type="text" id="searchInput" class="search-input" placeholder="Ingrese nombre, apellido o DNI del paciente">
+                    <button type="submit" class="search-button">
+                        <i class="fas fa-search"></i>
+                        Buscar
+                    </button>
                 </form>
-                <button id="guardarCambios" class="action-button">Guardar Cambios</button>
+                <div id="suggestions" class="suggestions"></div>
             </div>
         </div>
     </div>
 
-    <!-- Añade este div para el mensaje de éxito -->
-    <div id="successMessage" class="success-message">Guardado exitosamente</div>
+    <!-- Modal para mostrar los datos del paciente -->
+    <div id="pacienteModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Datos del Paciente</h2>
+            <div id="pacienteData" class="paciente-info"></div>
+        </div>
+    </div>
+
+    <!-- Añade este nuevo modal después del modal existente -->
+    <div id="pacienteDetalleModal" class="modal paciente-detalle-modal">
+        <div class="modal-content paciente-detalle-content">
+            <span class="close">&times;</span>
+            <div class="paciente-header">
+                <img src="placeholder-avatar.jpg" alt="Foto del paciente" class="paciente-foto">
+                <div class="paciente-info-basica">
+                    <h2 id="pacienteNombre"></h2>
+                    <p id="pacienteFechaNacimiento"></p>
+                </div>
+                <button class="iniciar-consulta">INICIAR NUEVA CONSULTA</button>
+            </div>
+            <div class="paciente-nav">
+                <button class="nav-button active" data-section="historia">HISTORIA</button>
+                <button class="nav-button" data-section="tratamientos">TRATAMIENTOS</button>
+                <button class="nav-button" data-section="odontograma">ODONTOGRAMA</button>
+                <button class="nav-button" data-section="citas">CITAS</button>
+            </div>
+            <div id="historiaContent" class="section-content active">
+                <!-- Contenido de la sección Historia -->
+                <div class="paciente-detalles">
+                    <div class="signos-vitales">
+                        <h3>SIGNOS VITALES</h3>
+                        <div id="signosVitales"></div>
+                    </div>
+                    <div class="antecedentes">
+                        <h3>ANTECEDENTES</h3>
+                        <div id="antecedentesPatologicos"></div>
+                        <div id="antecedentesHereditarios"></div>
+                        <button class="agregar-antecedente">+ AGREGAR ANTECEDENTES NO PATOLÓGICOS</button>
+                        <button class="agregar-antecedente">+ AGREGAR GINECO-OBSTÉTRICOS</button>
+                        <button class="agregar-antecedente">+ AGREGAR ALERGIAS</button>
+                    </div>
+                </div>
+            </div>
+            <div id="tratamientosContent" class="section-content">
+                <!-- Contenido de la sección Tratamientos -->
+                <h3>Tratamientos del paciente</h3>
+                <!-- Aquí puedes agregar la lista de tratamientos -->
+            </div>
+            <div id="odontogramaContent" class="section-content">
+                <!-- Contenido de la sección Odontograma -->
+                <h3>Odontograma del paciente</h3>
+                <!-- Aquí puedes agregar el odontograma -->
+            </div>
+            <div id="citasContent" class="section-content">
+                <!-- Contenido de la sección Citas -->
+                <h3>Citas del paciente</h3>
+                <div id="citasAgendadas"></div>
+                <div id="citasPasadas"></div>
+            </div>
+        </div>
+    </div>
 
     <script>
-        // Función para cargar y mostrar los pacientes
-        function cargarPacientes() {
-            const historiasClinicas = JSON.parse(localStorage.getItem('historiasClinicas')) || [];
-            const tbody = document.querySelector('.results-table tbody');
-            tbody.innerHTML = '';
+        const searchInput = document.getElementById('searchInput');
+        const suggestions = document.getElementById('suggestions');
+        const modal = document.getElementById('pacienteModal');
+        const pacienteData = document.getElementById('pacienteData');
+        const closeBtn = document.getElementsByClassName('close')[0];
 
-            historiasClinicas.forEach((paciente, index) => {
-                const row = `
-                    <tr>
-                        <td>${paciente.nombre}</td>
-                        <td>${paciente.apellido}</td>
-                        <td>${paciente.dni || 'N/A'}</td>
-                        <td>${paciente.fechaNacimiento}</td>
-                        <td>${paciente.telefono}</td>
-                        <td>
-                            <button class="action-button" onclick="verHistoria(${index})">Ver Historia</button>
-                            <button class="action-button" onclick="editarPaciente(${index})">Editar</button>
-                            <button class="action-button delete-button" onclick="eliminarPaciente(${index})">Eliminar</button>
-                        </td>
-                    </tr>
-                `;
-                tbody.innerHTML += row;
-            });
+        searchInput.addEventListener('input', buscarSugerencias);
+
+        function buscarSugerencias() {
+            const busqueda = searchInput.value.toLowerCase();
+            const historiasClinicas = JSON.parse(localStorage.getItem('historiasClinicas')) || [];
+            
+            suggestions.innerHTML = '';
+            
+            if (busqueda.length > 0) {
+                const resultados = historiasClinicas.filter(paciente => 
+                    paciente.nombre.toLowerCase().includes(busqueda) ||
+                    paciente.apellido.toLowerCase().includes(busqueda) ||
+                    paciente.dni.includes(busqueda)
+                );
+                
+                resultados.forEach(paciente => {
+                    const sugerencia = document.createElement('div');
+                    sugerencia.classList.add('suggestion-item');
+                    sugerencia.textContent = `${paciente.apellido.toUpperCase()}, ${paciente.nombre} ${paciente.dni}`;
+                    sugerencia.onclick = () => {
+                        searchInput.value = sugerencia.textContent;
+                        suggestions.innerHTML = '';
+                        mostrarDetallesPaciente(paciente);
+                    };
+                    suggestions.appendChild(sugerencia);
+                });
+            }
         }
 
-        // Función para buscar pacientes
-        function buscarPacientes(evento) {
-            evento.preventDefault();
-            const busqueda = document.querySelector('.search-input').value.toLowerCase();
+        function mostrarDetallesPaciente(paciente) {
+            const detalleModal = document.getElementById('pacienteDetalleModal');
+            
+            document.getElementById('pacienteNombre').textContent = `${paciente.apellido.toUpperCase()}, ${paciente.nombre}`;
+            document.getElementById('pacienteFechaNacimiento').textContent = `${paciente.fechaNacimiento} | ${paciente.genero}`;
+            
+            document.getElementById('signosVitales').innerHTML = `
+                <div><span>ALTURA</span><span>${paciente.altura || '1.78'} Mts</span></div>
+                <div><span>PESO</span><span>${paciente.peso || '74'} Kg</span></div>
+                <div><span>BMI</span><span>${paciente.bmi || '23.4'} BMI</span></div>
+                <div><span>TEMPERATURA</span><span>${paciente.temperatura || '36.5'} °C</span></div>
+                <div><span>FREC. RESPIRATORIA</span><span>${paciente.frecRespiratoria || '17'} r/m</span></div>
+                <div><span>PRESIÓN ARTERIAL</span><span>${paciente.presionArterial || '120/80'} mmHg</span></div>
+                <div><span>FREC. CARDIACA</span><span>${paciente.frecCardiaca || '62'} Fc</span></div>
+            `;
+            
+            document.getElementById('antecedentesPatologicos').innerHTML = `
+                <h4>ANTECEDENTES PATOLÓGICOS</h4>
+                <div><span>Traumatismo</span><span>${paciente.traumatismo || 'No registrado'}</span></div>
+                <div><span>Cirugías Previas</span><span>${paciente.cirugiasPrevias || 'No registrado'}</span></div>
+            `;
+            
+            document.getElementById('antecedentesHereditarios').innerHTML = `
+                <h4>ANTECEDENTES HEREDO-FAMILIARES</h4>
+                <div><span>Diabetes</span><span>${paciente.diabetesFamiliar || 'No registrado'}</span></div>
+                <div><span>Hipertensión Arterial</span><span>${paciente.hipertensionFamiliar || 'No registrado'}</span></div>
+            `;
+            
+            // Asegúrate de que la pestaña "Historia" esté activa por defecto
+            document.querySelector('.nav-button[data-section="historia"]').click();
+            
+            detalleModal.style.display = 'block';
+        }
+
+        function buscarPaciente() {
+            const busqueda = searchInput.value.toLowerCase();
             const historiasClinicas = JSON.parse(localStorage.getItem('historiasClinicas')) || [];
-            const resultados = historiasClinicas.filter(paciente => 
+            
+            const pacienteEncontrado = historiasClinicas.find(paciente => 
                 paciente.nombre.toLowerCase().includes(busqueda) ||
                 paciente.apellido.toLowerCase().includes(busqueda) ||
-                paciente.telefono.includes(busqueda) ||
-                paciente.email.toLowerCase().includes(busqueda)
+                paciente.dni.includes(busqueda)
             );
 
-            const tbody = document.querySelector('.results-table tbody');
-            tbody.innerHTML = '';
-
-            resultados.forEach((paciente, index) => {
-                const row = `
-                    <tr>
-                        <td>${paciente.nombre}</td>
-                        <td>${paciente.apellido}</td>
-                        <td>${paciente.dni || 'N/A'}</td>
-                        <td>${paciente.fechaNacimiento}</td>
-                        <td>${paciente.telefono}</td>
-                        <td>
-                            <button class="action-button" onclick="verHistoria(${index})">Ver Historia</button>
-                            <button class="action-button" onclick="editarPaciente(${index})">Editar</button>
-                            <button class="action-button delete-button" onclick="eliminarPaciente(${index})">Eliminar</button>
-                        </td>
-                    </tr>
-                `;
-                tbody.innerHTML += row;
-            });
+            if (pacienteEncontrado) {
+                mostrarDetallesPaciente(pacienteEncontrado);
+            } else {
+                alert('No se encontró ningún paciente con esos datos.');
+            }
         }
 
-        // Función para ver la historia clínica
-        function verHistoria(index) {
-            const historiasClinicas = JSON.parse(localStorage.getItem('historiasClinicas')) || [];
-            const paciente = historiasClinicas[index];
-            
-            const modal = document.getElementById('historiaClinicaModal');
-            const contenido = document.getElementById('historiaClinicaContenido');
-            
-            // Construir el contenido de la historia clínica
-            let historiaHTML = `
-                <div class="historia-header">
-                    ${paciente.foto ? `<img src="${paciente.foto}" alt="Foto del paciente" class="paciente-foto">` : ''}
-                    <h2>Historia Clínica de ${paciente.nombre} ${paciente.apellido}</h2>
-                </div>
+        // Actualizar la funcionalidad de cierre para el nuevo modal
+        const detalleModal = document.getElementById('pacienteDetalleModal');
+        const detalleCloseBtn = detalleModal.querySelector('.close');
+
+        detalleCloseBtn.onclick = function() {
+            detalleModal.style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target == detalleModal) {
+                detalleModal.style.display = 'none';
+            }
+        }
+
+        // Asegúrate de que el formulario de búsqueda esté correctamente vinculado
+        document.querySelector('.search-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            buscarPaciente();
+        });
+
+        // Funcionalidad para la barra de navegación del paciente
+        const navButtons = document.querySelectorAll('.nav-button');
+        const sectionContents = document.querySelectorAll('.section-content');
+
+        navButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                navButtons.forEach(btn => btn.classList.remove('active'));
+                sectionContents.forEach(content => content.classList.remove('active'));
                 
-                <div class="seccion">
-                    <h3>Filiación</h3>
-                    <div class="fila">
-                        <p><strong>Nombre:</strong> ${paciente.nombre}</p>
-                        <p><strong>Apellido:</strong> ${paciente.apellido}</p>
-                    </div>
-                    <div class="fila">
-                        <p><strong>Sexo:</strong> ${paciente.sexo}</p>
-                        <p><strong>Fecha de Nacimiento:</strong> ${paciente.fechaNacimiento}</p>
-                    </div>
-                    <div class="fila">
-                        <p><strong>Dirección:</strong> ${paciente.direccion}</p>
-                        <p><strong>Teléfono:</strong> ${paciente.telefono}</p>
-                    </div>
-                    <div class="fila">
-                        <p><strong>Email:</strong> ${paciente.email || 'N/A'}</p>
-                    </div>
-                    <div class="fila">
-                        <p><strong>Ocupación:</strong> ${paciente.ocupacion || 'N/A'}</p>
-                        <p><strong>Estado Civil:</strong> ${paciente.estadoCivil}</p>
-                    </div>
-                </div>
-
-                <div class="seccion">
-                    <h3>Antecedentes</h3>
-                    <div class="fila">
-                        <p><strong>N° de Hijo:</strong> ${paciente.numHijo || 'N/A'}</p>
-                        <p><strong>Complicaciones en el embarazo:</strong> ${paciente.complicacionesEmbarazo || 'N/A'}</p>
-                    </div>
-                    <div class="fila">
-                        <p><strong>Tipo de Parto:</strong> ${paciente.tipoParto || 'N/A'}</p>
-                        <p><strong>Peso de Nacimiento:</strong> ${paciente.pesoNacimiento ? paciente.pesoNacimiento + ' kg' : 'N/A'}</p>
-                    </div>
-                    <div class="fila">
-                        <p><strong>Longitud al Nacer:</strong> ${paciente.longitudNacimiento ? paciente.longitudNacimiento + ' cm' : 'N/A'}</p>
-                        <p><strong>Vacunas:</strong> ${paciente.vacunas || 'N/A'}</p>
-                    </div>
-                    <div class="fila">
-                        <p><strong>Enfermedades Importantes:</strong> ${paciente.enfermedadesImportantes || 'N/A'}</p>
-                        <p><strong>Hospitalizado:</strong> ${paciente.hospitalizado || 'N/A'}</p>
-                    </div>
-                    <div class="fila">
-                        <p><strong>Operado:</strong> ${paciente.operado || 'N/A'}</p>
-                        <p><strong>Edad a la que Caminó:</strong> ${paciente.edadCamino ? paciente.edadCamino + ' meses' : 'N/A'}</p>
-                    </div>
-                    <div class="fila">
-                        <p><strong>Edad a la que Habló:</strong> ${paciente.edadHablo ? paciente.edadHablo + ' meses' : 'N/A'}</p>
-                    </div>
-                </div>
-
-                <div class="seccion">
-                    <h3>Hábitos de Vida</h3>
-                    <div class="fila">
-                        <p><strong>Desayuna Todos los Días:</strong> ${paciente.desayunaTodosLosDias || 'N/A'}</p>
-                        <p><strong>Almuerza Todos los Días:</strong> ${paciente.almuerzaTodosLosDias || 'N/A'}</p>
-                    </div>
-                    <div class="fila">
-                        <p><strong>Cena Todos los Días:</strong> ${paciente.cenaTodosLosDias || 'N/A'}</p>
-                        <p><strong>Realiza Algún Deporte:</strong> ${paciente.realizaDeporte || 'N/A'}</p>
-                    </div>
-                </div>
-
-                <div class="seccion">
-                    <h3>Antecedentes Familiares</h3>
-                    <div class="fila">
-                        <p><strong>Diabetes:</strong> ${paciente.diabetes || 'N/A'}</p>
-                        <p><strong>Hipertensión:</strong> ${paciente.hipertension || 'N/A'}</p>
-                    </div>
-                    <div class="fila">
-                        <p><strong>Problemas Tiroideos:</strong> ${paciente.problemasTiroideos || 'N/A'}</p>
-                    </div>
-                </div>
-
-                <div class="seccion">
-                    <h3>Triaje</h3>
-                    <div class="fila">
-                        <p><strong>Peso:</strong> ${paciente.peso ? paciente.peso + ' kg' : 'N/A'}</p>
-                        <p><strong>Talla:</strong> ${paciente.talla ? paciente.talla + ' cm' : 'N/A'}</p>
-                    </div>
-                </div>
-
-                <div class="seccion">
-                    <h3>Alergias</h3>
-                    <div class="fila">
-                        <p><strong>Alergia Conocida:</strong> ${paciente.alergiaConocida || 'N/A'}</p>
-                        <p><strong>Alergia a Medicamento:</strong> ${paciente.alergiaMedicamento || 'N/A'}</p>
-                    </div>
-                    <div class="fila">
-                        <p><strong>Alergia a Penicilina:</strong> ${paciente.alergiaPenicilina || 'N/A'}</p>
-                        <p><strong>Alergia a Anestesia Local:</strong> ${paciente.alergiaAnestesiaLocal || 'N/A'}</p>
-                    </div>
-                    <div class="fila">
-                        <p><strong>Alergia al Látex:</strong> ${paciente.alergiaLatex || 'N/A'}</p>
-                        <p><strong>Alergia a Metal:</strong> ${paciente.alergiaMetal || 'N/A'}</p>
-                    </div>
-                    <div class="fila">
-                        <p><strong>Alergia a Alimento:</strong> ${paciente.alergiaAlimento || 'N/A'}</p>
-                        <p><strong>Reacción en Dentista:</strong> ${paciente.reaccionDentista || 'N/A'}</p>
-                    </div>
-                    <div class="fila">
-                        <p><strong>Anafilaxia:</strong> ${paciente.anafilaxia || 'N/A'}</p>
-                        <p><strong>Necesita EpiPen:</strong> ${paciente.epipen || 'N/A'}</p>
-                    </div>
-                </div>
-            `;
-            
-            contenido.innerHTML = historiaHTML;
-            modal.style.display = "block";
-        }
-
-        // Cerrar la ventana modal
-        const modal = document.getElementById('historiaClinicaModal');
-        const span = document.getElementsByClassName("close")[0];
-
-        span.onclick = function() {
-            modal.style.display = "none";
-        }
-
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-
-        // Función para editar un paciente
-        function editarPaciente(index) {
-            const historiasClinicas = JSON.parse(localStorage.getItem('historiasClinicas')) || [];
-            const paciente = historiasClinicas[index];
-            
-            const modal = document.getElementById('editarHistoriaModal');
-            const form = document.getElementById('editarHistoriaForm');
-            
-            let formHTML = `
-                <div class="form-content">
-                    <h2>Filiación</h2>
-                    <div class="filiacion-layout">
-                        <div class="photo-container" onclick="document.getElementById('foto-input').click()">
-                            ${paciente.foto ? `<img src="${paciente.foto}" alt="Foto del paciente" style="width: 100%; height: 100%; object-fit: cover;">` : '<i class="fas fa-camera"></i>'}
-                            <input type="file" id="foto-input" style="display: none;" accept="image/*" onchange="previewImage(event)">
-                        </div>
-                        <div class="filiacion-datos">
-                            <div class="row">
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label for="nombre" class="required">Nombre:</label>
-                                        <input type="text" id="nombre" name="nombre" value="${paciente.nombre}" required>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label for="apellido" class="required">Apellido:</label>
-                                        <input type="text" id="apellido" name="apellido" value="${paciente.apellido}" required>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label for="fechaNacimiento" class="required">Fecha de Nacimiento:</label>
-                                        <input type="date" id="fechaNacimiento" name="fechaNacimiento" value="${paciente.fechaNacimiento}" required>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label for="sexo" class="required">Sexo:</label>
-                                        <select id="sexo" name="sexo" required>
-                                            <option value="masculino" ${paciente.sexo === 'masculino' ? 'selected' : ''}>Masculino</option>
-                                            <option value="femenino" ${paciente.sexo === 'femenino' ? 'selected' : ''}>Femenino</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label for="estadoCivil" class="required">Estado Civil:</label>
-                                        <select id="estadoCivil" name="estadoCivil" required>
-                                            <option value="soltero" ${paciente.estadoCivil === 'soltero' ? 'selected' : ''}>Soltero</option>
-                                            <option value="casado" ${paciente.estadoCivil === 'casado' ? 'selected' : ''}>Casado</option>
-                                            <option value="divorciado" ${paciente.estadoCivil === 'divorciado' ? 'selected' : ''}>Divorciado</option>
-                                            <option value="viudo" ${paciente.estadoCivil === 'viudo' ? 'selected' : ''}>Viudo</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label for="direccion" class="required">Dirección:</label>
-                                        <input type="text" id="direccion" name="direccion" value="${paciente.direccion}" required>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label for="telefono" class="required">Teléfono:</label>
-                                        <input type="tel" id="telefono" name="telefono" value="${paciente.telefono}" required>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label for="email">Email:</label>
-                                        <input type="email" id="email" name="email" value="${paciente.email || ''}">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label for="ocupacion">Ocupación:</label>
-                                        <input type="text" id="ocupacion" name="ocupacion" value="${paciente.ocupacion || ''}">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="antecedentes-container">
-                    <h2>Antecedentes</h2>
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="numHijo" class="required">N° de Hijo:</label>
-                                <input type="number" id="numHijo" name="numHijo" value="${paciente.numHijo}" min="1" required>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="complicacionesEmbarazo" class="required">¿Complicaciones en el embarazo?</label>
-                                <select id="complicacionesEmbarazo" name="complicacionesEmbarazo" required>
-                                    <option value="si" ${paciente.complicacionesEmbarazo === 'si' ? 'selected' : ''}>Sí</option>
-                                    <option value="no" ${paciente.complicacionesEmbarazo === 'no' ? 'selected' : ''}>No</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="tipoParto" class="required">Tipo de Parto:</label>
-                                <select id="tipoParto" name="tipoParto" required>
-                                    <option value="natural" ${paciente.tipoParto === 'natural' ? 'selected' : ''}>Natural</option>
-                                    <option value="cesarea" ${paciente.tipoParto === 'cesarea' ? 'selected' : ''}>Cesárea</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="pesoNacimiento" class="required">Peso de Nacimiento (kg):</label>
-                                <input type="number" id="pesoNacimiento" name="pesoNacimiento" value="${paciente.pesoNacimiento}" step="0.01" required>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="longitudNacimiento" class="required">Longitud al Nacer (cm):</label>
-                                <input type="number" id="longitudNacimiento" name="longitudNacimiento" value="${paciente.longitudNacimiento}" step="0.1" required>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="vacunas" class="required">Vacunas:</label>
-                                <select id="vacunas" name="vacunas" required>
-                                    <option value="completas" ${paciente.vacunas === 'completas' ? 'selected' : ''}>Completas</option>
-                                    <option value="incompletas" ${paciente.vacunas === 'incompletas' ? 'selected' : ''}>Incompletas</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="enfermedadesImportantes" class="required">¿Enfermedades Importantes?</label>
-                                <select id="enfermedadesImportantes" name="enfermedadesImportantes" required>
-                                    <option value="si" ${paciente.enfermedadesImportantes === 'si' ? 'selected' : ''}>Sí</option>
-                                    <option value="no" ${paciente.enfermedadesImportantes === 'no' ? 'selected' : ''}>No</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="hospitalizado" class="required">¿Ha sido hospitalizado?</label>
-                                <select id="hospitalizado" name="hospitalizado" required>
-                                    <option value="si" ${paciente.hospitalizado === 'si' ? 'selected' : ''}>Sí</option>
-                                    <option value="no" ${paciente.hospitalizado === 'no' ? 'selected' : ''}>No</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="operado" class="required">¿Ha sido operado?</label>
-                                <select id="operado" name="operado" required>
-                                    <option value="si" ${paciente.operado === 'si' ? 'selected' : ''}>Sí</option>
-                                    <option value="no" ${paciente.operado === 'no' ? 'selected' : ''}>No</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="edadCamino" class="required">Edad a la que Caminó (meses):</label>
-                                <input type="number" id="edadCamino" name="edadCamino" value="${paciente.edadCamino}" required>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="edadHablo" class="required">Edad a la que Habló (meses):</label>
-                                <input type="number" id="edadHablo" name="edadHablo" value="${paciente.edadHablo}" required>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="habitos-container">
-                    <h2>Hábitos de Vida</h2>
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="desayunaTodosLosDias" class="required">¿Desayuna Todos los Días?</label>
-                                <select id="desayunaTodosLosDias" name="desayunaTodosLosDias" required>
-                                    <option value="si" ${paciente.desayunaTodosLosDias === 'si' ? 'selected' : ''}>Sí</option>
-                                    <option value="no" ${paciente.desayunaTodosLosDias === 'no' ? 'selected' : ''}>No</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="almuerzaTodosLosDias" class="required">¿Almuerza Todos los Días?</label>
-                                <select id="almuerzaTodosLosDias" name="almuerzaTodosLosDias" required>
-                                    <option value="si" ${paciente.almuerzaTodosLosDias === 'si' ? 'selected' : ''}>Sí</option>
-                                    <option value="no" ${paciente.almuerzaTodosLosDias === 'no' ? 'selected' : ''}>No</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="cenaTodosLosDias" class="required">¿Cena Todos los Días?</label>
-                                <select id="cenaTodosLosDias" name="cenaTodosLosDias" required>
-                                    <option value="si" ${paciente.cenaTodosLosDias === 'si' ? 'selected' : ''}>Sí</option>
-                                    <option value="no" ${paciente.cenaTodosLosDias === 'no' ? 'selected' : ''}>No</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="realizaDeporte" class="required">¿Realiza Algún Deporte?</label>
-                                <select id="realizaDeporte" name="realizaDeporte" required>
-                                    <option value="si" ${paciente.realizaDeporte === 'si' ? 'selected' : ''}>Sí</option>
-                                    <option value="aveces" ${paciente.realizaDeporte === 'aveces' ? 'selected' : ''}>A veces</option>
-                                    <option value="no" ${paciente.realizaDeporte === 'no' ? 'selected' : ''}>No</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="familiares-container">
-                    <h2>Antecedentes Familiares</h2>
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="diabetes" class="required">¿Diabetes?</label>
-                                <select id="diabetes" name="diabetes" required>
-                                    <option value="si" ${paciente.diabetes === 'si' ? 'selected' : ''}>Sí</option>
-                                    <option value="no" ${paciente.diabetes === 'no' ? 'selected' : ''}>No</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="hipertension" class="required">¿Hipertensión?</label>
-                                <select id="hipertension" name="hipertension" required>
-                                    <option value="si" ${paciente.hipertension === 'si' ? 'selected' : ''}>Sí</option>
-                                    <option value="no" ${paciente.hipertension === 'no' ? 'selected' : ''}>No</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="problemasTiroideos" class="required">¿Problemas Tiroideos?</label>
-                                <select id="problemasTiroideos" name="problemasTiroideos" required>
-                                    <option value="si" ${paciente.problemasTiroideos === 'si' ? 'selected' : ''}>Sí</option>
-                                    <option value="no" ${paciente.problemasTiroideos === 'no' ? 'selected' : ''}>No</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="triaje-container">
-                    <h2>Triaje</h2>
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="peso" class="required">Peso (kg):</label>
-                                <input type="number" id="peso" name="peso" value="${paciente.peso}" step="0.1" required>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="talla" class="required">Talla (cm):</label>
-                                <input type="number" id="talla" name="talla" value="${paciente.talla}" step="0.1" required>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="alergias-container">
-                    <h2>Alergias</h2>
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="alergiaConocida" class="required">¿Tiene alguna alergia conocida?</label>
-                                <select id="alergiaConocida" name="alergiaConocida" required>
-                                    <option value="si" ${paciente.alergiaConocida === 'si' ? 'selected' : ''}>Sí</option>
-                                    <option value="no" ${paciente.alergiaConocida === 'no' ? 'selected' : ''}>No</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="alergiaMedicamento" class="required">¿Es alérgico a algún medicamento?</label>
-                                <select id="alergiaMedicamento" name="alergiaMedicamento" required>
-                                    <option value="si" ${paciente.alergiaMedicamento === 'si' ? 'selected' : ''}>Sí</option>
-                                    <option value="no" ${paciente.alergiaMedicamento === 'no' ? 'selected' : ''}>No</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="alergiaPenicilina" class="required">¿Es alérgico a la penicilina o a algún antibiótico?</label>
-                                <select id="alergiaPenicilina" name="alergiaPenicilina" required>
-                                    <option value="si" ${paciente.alergiaPenicilina === 'si' ? 'selected' : ''}>Sí</option>
-                                    <option value="no" ${paciente.alergiaPenicilina === 'no' ? 'selected' : ''}>No</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="alergiaAnestesiaLocal" class="required">¿Ha tenido alguna reacción alérgica a la anestesia local?</label>
-                                <select id="alergiaAnestesiaLocal" name="alergiaAnestesiaLocal" required>
-                                    <option value="si" ${paciente.alergiaAnestesiaLocal === 'si' ? 'selected' : ''}>Sí</option>
-                                    <option value="no" ${paciente.alergiaAnestesiaLocal === 'no' ? 'selected' : ''}>No</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="alergiaLatex" class="required">¿Es alérgico al látex?</label>
-                                <select id="alergiaLatex" name="alergiaLatex" required>
-                                    <option value="si" ${paciente.alergiaLatex === 'si' ? 'selected' : ''}>Sí</option>
-                                    <option value="no" ${paciente.alergiaLatex === 'no' ? 'selected' : ''}>No</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="alergiaMetal" class="required">¿Es alérgico a algún metal, como el níquel?</label>
-                                <select id="alergiaMetal" name="alergiaMetal" required>
-                                    <option value="si" ${paciente.alergiaMetal === 'si' ? 'selected' : ''}>Sí</option>
-                                    <option value="no" ${paciente.alergiaMetal === 'no' ? 'selected' : ''}>No</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="alergiaAlimento" class="required">¿Es alérgico a algún alimento?</label>
-                                <select id="alergiaAlimento" name="alergiaAlimento" required>
-                                    <option value="si" ${paciente.alergiaAlimento === 'si' ? 'selected' : ''}>Sí</option>
-                                    <option value="no" ${paciente.alergiaAlimento === 'no' ? 'selected' : ''}>No</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="reaccionDentista" class="required">¿Ha tenido alguna reacción alérgica durante una visita al dentista?</label>
-                                <select id="reaccionDentista" name="reaccionDentista" required>
-                                    <option value="si" ${paciente.reaccionDentista === 'si' ? 'selected' : ''}>Sí</option>
-                                    <option value="no" ${paciente.reaccionDentista === 'no' ? 'selected' : ''}>No</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="anafilaxia" class="required">¿Alguna vez ha sufrido anafilaxia (reacción alérgica grave)?</label>
-                                <select id="anafilaxia" name="anafilaxia" required>
-                                    <option value="si" ${paciente.anafilaxia === 'si' ? 'selected' : ''}>Sí</option>
-                                    <option value="no" ${paciente.anafilaxia === 'no' ? 'selected' : ''}>No</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="epipen" class="required">¿Necesita llevar un autoinyector de epinefrina (EpiPen) debido a alergias?</label>
-                                <select id="epipen" name="epipen" required>
-                                    <option value="si" ${paciente.epipen === 'si' ? 'selected' : ''}>Sí</option>
-                                    <option value="no" ${paciente.epipen === 'no' ? 'selected' : ''}>No</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            form.innerHTML = formHTML;
-            modal.style.display = "block";
-
-            // Guardar cambios
-            document.getElementById('guardarCambios').onclick = function() {
-                const formData = new FormData(form);
-                const pacienteActualizado = {};
-                for (let [key, value] of formData.entries()) {
-                    pacienteActualizado[key] = value;
-                }
-                historiasClinicas[index] = {...paciente, ...pacienteActualizado};
-                localStorage.setItem('historiasClinicas', JSON.stringify(historiasClinicas));
-                modal.style.display = "none";
-                cargarPacientes(); // Actualizar la lista de pacientes
-            };
-        }
-
-        // Cerrar la ventana modal de edición
-        const editarModal = document.getElementById('editarHistoriaModal');
-        const editarSpan = editarModal.getElementsByClassName("close")[0];
-
-        editarSpan.onclick = function() {
-            editarModal.style.display = "none";
-        }
-
-        window.onclick = function(event) {
-            if (event.target == editarModal) {
-                editarModal.style.display = "none";
-            }
-        }
-
-        // Función para eliminar un paciente
-        function eliminarPaciente(index) {
-            if (confirm('¿Está seguro de que desea eliminar este paciente?')) {
-                const historiasClinicas = JSON.parse(localStorage.getItem('historiasClinicas')) || [];
-                historiasClinicas.splice(index, 1);
-                localStorage.setItem('historiasClinicas', JSON.stringify(historiasClinicas));
-                cargarPacientes();
-            }
-        }
-
-        // Cargar pacientes al iniciar la página
-        window.addEventListener('load', cargarPacientes);
-
-        // Agregar evento al formulario de búsqueda
-        document.querySelector('.search-form').addEventListener('submit', buscarPacientes);
+                this.classList.add('active');
+                const section = this.dataset.section;
+                document.getElementById(`${section}Content`).classList.add('active');
+            });
+        });
     </script>
 </body>
 
