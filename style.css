@@ -15,7 +15,7 @@ body, html {
 
 .left-side {
     flex: 1;
-    background-image: url('./enma.jpg');
+    background-image: url('C:/Users/USER/Documents/pagina ofi/enma.jpg');
     background-size: cover;
     background-position: center;
     position: relative;
@@ -127,6 +127,7 @@ nav ul.nav-links a {
 
 /* Estilo para el formulario de login */
 .login-container {
+    position: relative;
     background: rgba(255, 255, 255, 0.9);
     border-radius: 10px;
     padding: 30px;
@@ -181,4 +182,116 @@ nav ul.nav-links a {
     right: 10px;
     top: 10px;
     color: #999;
+}
+
+/* Añade estos estilos al final del archivo */
+
+.logo-container {
+    position: relative;
+    margin-bottom: 30px;
+    width: 500px; /* Aumentado de 450px a 500px */
+    height: 120px; /* Aumentado de 108px a 120px */
+}
+
+.overlay-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    color: #000000;
+    text-shadow: 1px 1px 2px rgba(255,255,255,0.5);
+    text-align: center;
+    width: 100%;
+    font-family: 'Lora', serif;
+    margin: 0;
+    font-weight: bold;
+    line-height: 1.2;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.overlay-text:hover {
+    opacity: 0.8;
+}
+
+.overlay-text .line1 {
+    font-size: 2.2em; /* Aumentado de 2em a 2.2em */
+    margin-bottom: 5px;
+}
+
+.overlay-text .line2 {
+    font-size: 2.7em; /* Aumentado de 2.5em a 2.7em */
+}
+
+.animated-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    position: relative;
+    z-index: 0;
+}
+
+/* Eliminar o comentar el estilo h1 existente si entra en conflicto */
+/*
+h1 {
+    font-family: 'Lora', serif;
+    font-size: 2.5em;
+    color: #333333;
+    text-align: center;
+    margin-bottom: 30px;
+}
+*/
+
+.logo-shadow {
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70%;
+    height: 20px;
+    background: radial-gradient(ellipse at center, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0) 70%);
+    border-radius: 50%;
+    animation: shadowPulse 3s ease-in-out infinite;
+}
+
+/* Eliminamos la animación floatLogo */
+
+@keyframes shadowPulse {
+    0%, 100% {
+        transform: translateX(-50%) scale(1);
+        opacity: 0.4;
+    }
+    50% {
+        transform: translateX(-50%) scale(0.8);
+        opacity: 0.2;
+    }
+}
+
+/* Ajusta el margen superior del formulario de inicio de sesión */
+.login-container {
+    margin-top: 20px;
+}
+
+.close-button {
+    position: absolute;
+    top: 5px;
+    right: 10px; /* Cambiado de 'left: 10px' a 'right: 10px' */
+    font-size: 18px;
+    cursor: pointer;
+    color: #999;
+    transition: color 0.3s ease, transform 0.3s ease;
+    padding: 5px;
+}
+
+.close-button:hover {
+    color: #333;
+    transform: translateX(3px); /* Cambiado de -3px a 3px para que se mueva hacia la derecha */
+}
+
+.overlay-text .welcome-message {
+    display: block;
+    transition: opacity 0.5s ease-in-out;
 }
