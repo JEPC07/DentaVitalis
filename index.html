@@ -15,8 +15,15 @@
         </div>
         <div class="right-side">
             <div class="content-container">
-                <h1>Bienvenido a DentaVitalis</h1>
-                <div class="login-container">
+                <div class="logo-container">
+                    <h1 class="overlay-text" id="welcome-text">
+                        <span class="welcome-message">Bienvenido a DentaVitalis</span>
+                    </h1>
+                    <img src="logo2.png" alt="Logo DentaVitalis" class="animated-logo">
+                    <div class="logo-shadow"></div>
+                </div>
+                <div class="login-container hidden" id="login-container">
+                    <div class="close-button" id="close-login">&#8592;</div>
                     <form id="login-form">
                         <div class="input-group">
                             <input type="password" id="password" name="password" required>
@@ -32,6 +39,53 @@
     </div>
 
     <script>
+        const welcomeText = document.getElementById('welcome-text');
+        const loginContainer = document.getElementById('login-container');
+        const closeLogin = document.getElementById('close-login');
+
+        const welcomeMessages = [
+            "Bienvenido a DentaVitalis",
+            "Welcome to DentaVitalis",
+            "Benvenuti in DentaVitalis",
+            "Bem-vindo à DentaVitalis",
+            "Bienvenue chez DentaVitalis"
+        ];
+        let currentMessageIndex = 0;
+        let intervalId;
+
+        function changeWelcomeMessage() {
+            const welcomeSpan = welcomeText.querySelector('.welcome-message');
+            welcomeSpan.style.opacity = 0;
+            
+            setTimeout(() => {
+                currentMessageIndex = (currentMessageIndex + 1) % welcomeMessages.length;
+                welcomeSpan.textContent = welcomeMessages[currentMessageIndex];
+                welcomeSpan.style.opacity = 1;
+            }, 500); // Espera 500ms antes de cambiar el texto y hacerlo visible de nuevo
+        }
+
+        function startChangingMessage() {
+            intervalId = setInterval(changeWelcomeMessage, 3000);
+        }
+
+        function stopChangingMessage() {
+            clearInterval(intervalId);
+        }
+
+        startChangingMessage();
+
+        welcomeText.addEventListener('click', function() {
+            loginContainer.classList.remove('hidden');
+            this.classList.add('hidden');
+            stopChangingMessage();
+        });
+
+        closeLogin.addEventListener('click', function() {
+            loginContainer.classList.add('hidden');
+            welcomeText.classList.remove('hidden');
+            startChangingMessage();
+        });
+
         document.getElementById('login-form').addEventListener('submit', function(event) {
             event.preventDefault();
             var password = document.getElementById('password').value;
