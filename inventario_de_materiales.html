@@ -122,42 +122,50 @@
             padding: 20px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             flex: 1; /* Esto permite que el inventario ocupe el espacio disponible */
+            overflow: hidden; /* Añadido para evitar desbordamiento */
         }
 
         .side-panel {
-            width: 220px; /* Ajusta este valor segn necesites */
-            background-color: #f8f9fc;
-            padding: 15px;
+            width: 220px;
+            background-color: #ffffff;
+            padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             align-self: flex-start;
         }
 
         .side-panel h3 {
-            color: #4e73df;
-            margin-bottom: 15px;
+            color: #295369;
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #295369;
+            padding-bottom: 10px;
         }
 
         .panel-button {
             display: block;
             width: 100%;
-            padding: 10px 15px; /* Reducido el padding vertical */
-            margin-bottom: 10px; /* Reducido el margen inferior */
-            background-color: #295369;
-            color: white;
+            padding: 12px 15px;
+            margin-bottom: 12px;
+            background-color: #f0f3f7;
+            color: #295369;
             border: none;
-            border-radius: 5px;
+            border-radius: 6px;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 13px; /* Reducido el tamaño de la fuente */
+            font-size: 14px;
             font-weight: 600;
             text-align: left;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
         .panel-button:hover {
-            background-color: #1e3d4f;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            background-color: #295369;
+            color: #ffffff;
+            box-shadow: 0 4px 8px rgba(41, 83, 105, 0.2);
         }
 
         .panel-button:active {
@@ -165,9 +173,14 @@
         }
 
         .panel-button i {
-            margin-right: 8px;
-            width: 16px;
+            margin-right: 10px;
+            width: 20px;
             text-align: center;
+            font-size: 16px;
+        }
+
+        .panel-button:last-child {
+            margin-bottom: 0;
         }
 
         /* Estilos para las secciones */
@@ -236,6 +249,7 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            overflow-x: auto; /* Permite desplazamiento horizontal si es necesario */
         }
 
         .inventory-table th, .inventory-table td {
@@ -260,7 +274,7 @@
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 14px;
             transition: background-color 0.3s;
         }
 
@@ -274,12 +288,20 @@
         }
 
         .delete-btn {
-            background-color: #e74a3b;
-            color: white;
+            background-color: transparent;
+            color: #e74a3b;
+            border: none;
+            padding: 6px;
+            cursor: pointer;
+            transition: color 0.3s ease;
         }
 
         .delete-btn:hover {
-            background-color: #be2617;
+            color: #be2617;
+        }
+
+        .delete-btn i {
+            font-size: 16px;
         }
 
         /* Estilos para el registro de movimientos */
@@ -452,46 +474,24 @@
         .dashboard {
             display: flex;
             justify-content: space-around;
-            margin-bottom: 20px;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            flex-wrap: wrap;
         }
-        .chart-item {
+
+        .chart-container {
             text-align: center;
+            margin: 20px;
         }
-        .pie-chart {
+
+        .donut-chart {
+            position: relative;
             width: 150px;
             height: 150px;
-            border-radius: 50%;
-            background-color: #e0e0e0;
-            position: relative;
-            overflow: hidden;
-            margin: 0 auto 10px;
         }
-        .pie-slice {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            clip: rect(0, 150px, 150px, 75px);
-            transform-origin: 50% 50%;
-            transition: transform 0.3s ease;
+
+        .donut-ring {
+            transition: stroke-dasharray 0.3s ease;
         }
-        .pie-slice::before {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background-color: inherit;
-            transform-origin: 50% 50%;
-            transition: transform 0.3s ease;
-        }
-        .chart-item h4 {
-            margin: 0;
-            font-size: 14px;
-            color: #5a5c69;
-        }
+
         .percent-text {
             position: absolute;
             top: 50%;
@@ -499,6 +499,11 @@
             transform: translate(-50%, -50%);
             font-size: 18px;
             font-weight: bold;
+        }
+
+        .category-info {
+            margin-top: 10px;
+            font-size: 14px;
         }
 
         .form-row {
@@ -513,14 +518,35 @@
 
         .search-container {
             margin-bottom: 20px;
+            position: relative;
+            width: 100%; /* Asegura que ocupe todo el ancho disponible */
         }
 
         #searchInput {
             width: 100%;
-            padding: 10px;
+            padding: 12px 40px 12px 20px; /* Ajustado para dejar espacio al icono */
             font-size: 16px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
+        }
+
+        #searchInput:focus {
+            border-color: #295369;
+            box-shadow: 0 0 0 3px rgba(41, 83, 105, 0.1);
+            outline: none;
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #295369;
+            font-size: 18px;
+            pointer-events: none; /* Evita que el icono interfiera con el input */
         }
 
         .sortable {
@@ -568,88 +594,253 @@
             border-radius: 4px;
             font-size: 14px;
         }
+
+        .dashboard {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        .chart-container {
+            text-align: center;
+            margin: 20px;
+        }
+
+        .donut-chart {
+            position: relative;
+            width: 150px;
+            height: 150px;
+        }
+
+        .donut-ring {
+            transition: stroke-dasharray 0.3s ease;
+        }
+
+        .percent-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .category-info {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        /* Estilos de navegación lateral */
+        #topNav {
+            background-color: #ffffff;
+            color: var(--primary-color);
+            width: 250px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            padding: 80px 0 20px;
+            box-sizing: border-box;
+            z-index: 999;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        #topNav::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background-color: #ffffff;
+            z-index: 1001;
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            padding: 0 5px;
+            margin-top: 20px;
+            gap: 10px;
+        }
+
+        .nav-button {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 16px 5px;
+            background-color: #ffffff;
+            color: var(--primary-color);
+            border: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-button i {
+            font-size: 20px;
+            margin-right: 10px;
+            color: var(--primary-color);
+        }
+
+        .nav-button::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: var(--primary-color);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .nav-button:hover::after, .nav-button.active::after {
+            transform: translateX(0);
+        }
+
+        .nav-button.active {
+            background-color: rgba(41, 83, 105, 0.1);
+        }
+
+        .nav-button:hover {
+            background-color: rgba(41, 83, 105, 0.05);
+        }
+
+        /* Ajustes para el contenedor principal */
+        .main-container {
+            margin-left: 250px;
+            margin-top: 60px;
+            width: calc(100% - 250px);
+            min-height: calc(100vh - 60px);
+            padding: 20px;
+            box-sizing: border-box;
+        }
     </style>
 </head>
 
-<body>
-    <!-- Barra de navegación superior -->
-    <div class="navbar">
-        <h2>Inventario de Materiales</h2>
-    </div>
+<body id="page-top">
+    <div id="wrapper">
+        <!-- Barra de navegación superior con título -->
+        <nav class="navbar navbar-expand static-top" id="topBarNav">
+            <h1 class="navbar-brand"><i class="fas fa-tooth"></i> DentaVitalis</h1>
+            <button class="btn-logout" id="logoutButton" title="Cerrar sesión">
+                <i class="fas fa-lock"></i>
+            </button>
+        </nav>
 
-    <!-- Barra de navegación lateral -->
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <h2><i class="fas fa-tooth"></i> DentaVitalis</h2>
-        </div>
-        <ul class="sidebar-menu">
-            <li><a href="secondary.html"><i class="fas fa-home"></i>Menú Principal</a></li>
-            <li><a href="crear_historia_clinica.html"><i class="fas fa-file-medical"></i>Crear Historia Clínica</a></li>
-            <li><a href="inventario_de_materiales.html" class="active"><i class="fas fa-boxes"></i>Inventario de Materiales</a></li>
-            <li><a href="caja.html"><i class="fas fa-cash-register"></i>Caja</a></li>
-            <li><a href="busqueda_de_pacientes.html"><i class="fas fa-search"></i>Búsqueda de Pacientes</a></li>
-            <li><a href="tratamientos.html"><i class="fas fa-tooth"></i>Tratamientos</a></li>
-        </ul>
-    </div>
+        <!-- Barra de navegación lateral (sin el título) -->
+        <nav id="topNav">
+            <div class="button-container">
+                <button class="nav-button" onclick="location.href='secondary.html'">
+                    <i class="fas fa-home"></i> INICIO
+                </button>
+                <button class="nav-button" onclick="location.href='crear_historia_clinica.html'">
+                    <i class="fas fa-user-md"></i> CREAR HISTORIA
+                </button>
+                <button class="nav-button active" onclick="location.href='inventario_de_materiales.html'">
+                    <i class="fas fa-boxes"></i> INVENTARIO
+                </button>
+                <button class="nav-button" onclick="location.href='caja.html'">
+                    <i class="fas fa-cash-register"></i> CAJA
+                </button>
+                <button class="nav-button" onclick="location.href='busqueda_de_pacientes.html'">
+                    <i class="fas fa-search"></i> HISTORIAS
+                </button>
+            </div>
+        </nav>
 
-    <!-- Estructura principal -->
-    <div class="main-container">
-        <div class="dashboard">
-            <div class="chart-container">
-                <div id="pieMaterialMedico" class="pie-chart">
-                    <div class="pie-slice"></div>
+        <!-- Main Content -->
+        <main class="main-container">
+            <div class="dashboard">
+                <div class="chart-container">
+                    <div id="pieMaterialMedico" class="donut-chart">
+                        <svg width="150" height="150" viewBox="0 0 42 42">
+                            <circle class="donut-hole" cx="21" cy="21" r="15.91549430918954" fill="#fff"></circle>
+                            <circle class="donut-ring" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#d2d3d4" stroke-width="3"></circle>
+                            <circle class="donut-segment" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#ce4b99" stroke-width="3" stroke-dasharray="0 100" stroke-dashoffset="25"></circle>
+                        </svg>
+                        <div class="percent-text"></div>
+                        <div class="category-info"></div>
+                    </div>
+                    <p>Material Médico</p>
                 </div>
-                <p>Material Médico</p>
-            </div>
-            <div class="chart-container">
-                <div id="pieProductosHigiene" class="pie-chart">
-                    <div class="pie-slice"></div>
+                <div class="chart-container">
+                    <div id="pieProductosHigiene" class="donut-chart">
+                        <svg width="150" height="150" viewBox="0 0 42 42">
+                            <circle class="donut-hole" cx="21" cy="21" r="15.91549430918954" fill="#fff"></circle>
+                            <circle class="donut-ring" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#d2d3d4" stroke-width="3"></circle>
+                            <circle class="donut-segment" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#ce4b99" stroke-width="3" stroke-dasharray="0 100" stroke-dashoffset="25"></circle>
+                        </svg>
+                        <div class="percent-text"></div>
+                        <div class="category-info"></div>
+                    </div>
+                    <p>Productos de Higiene</p>
                 </div>
-                <p>Productos de Higiene</p>
-            </div>
-            <div class="chart-container">
-                <div id="pieMaterialQuirurgico" class="pie-chart">
-                    <div class="pie-slice"></div>
+                <div class="chart-container">
+                    <div id="pieMaterialQuirurgico" class="donut-chart">
+                        <svg width="150" height="150" viewBox="0 0 42 42">
+                            <circle class="donut-hole" cx="21" cy="21" r="15.91549430918954" fill="#fff"></circle>
+                            <circle class="donut-ring" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#d2d3d4" stroke-width="3"></circle>
+                            <circle class="donut-segment" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#ce4b99" stroke-width="3" stroke-dasharray="0 100" stroke-dashoffset="25"></circle>
+                        </svg>
+                        <div class="percent-text"></div>
+                        <div class="category-info"></div>
+                    </div>
+                    <p>Material Quirúrgico</p>
                 </div>
-                <p>Material Quirúrgico</p>
-            </div>
-            <div class="chart-container">
-                <div id="pieOtros" class="pie-chart">
-                    <div class="pie-slice"></div>
+                <div class="chart-container">
+                    <div id="pieOtros" class="donut-chart">
+                        <svg width="150" height="150" viewBox="0 0 42 42">
+                            <circle class="donut-hole" cx="21" cy="21" r="15.91549430918954" fill="#fff"></circle>
+                            <circle class="donut-ring" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#d2d3d4" stroke-width="3"></circle>
+                            <circle class="donut-segment" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#ce4b99" stroke-width="3" stroke-dasharray="0 100" stroke-dashoffset="25"></circle>
+                        </svg>
+                        <div class="percent-text"></div>
+                        <div class="category-info"></div>
+                    </div>
+                    <p>Otros</p>
                 </div>
-                <p>Otros</p>
             </div>
-        </div>
-        <div class="inventory-container">
-            <div class="inventory-section">
-                <h2>Inventario Actual</h2>
-                <div class="search-container">
-                    <input type="text" id="searchInput" placeholder="Buscar material...">
+            <div class="inventory-container">
+                <div class="inventory-section">
+                    <h2>Inventario Actual</h2>
+                    <div class="search-container">
+                        <input type="text" id="searchInput" placeholder="Buscar material...">
+                        <i class="fas fa-search search-icon"></i>
+                    </div>
+                    <table class="inventory-table">
+                        <thead>
+                            <tr>
+                                <th class="sortable" data-sort="name">Nombre del Material</th>
+                                <th class="sortable" data-sort="category">Tipo</th>
+                                <th class="sortable" data-sort="quantity">Cantidad</th>
+                                <th class="sortable" data-sort="minStock">Stock Mínimo</th>
+                                <th class="sortable" data-sort="consultorio">Consultorio</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventory-body">
+                            <!-- Los elementos del inventario se agregarán aquí dinámicamente -->
+                        </tbody>
+                    </table>
                 </div>
-                <table class="inventory-table">
-                    <thead>
-                        <tr>
-                            <th class="sortable" data-sort="name">Nombre del Material</th>
-                            <th class="sortable" data-sort="category">Tipo</th>
-                            <th class="sortable" data-sort="quantity">Cantidad</th>
-                            <th class="sortable" data-sort="minStock">Stock Mínimo</th>
-                            <th class="sortable" data-sort="consultorio">Consultorio</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody id="inventory-body">
-                        <!-- Los elementos del inventario se agregarán aquí dinámicamente -->
-                    </tbody>
-                </table>
+                <div class="side-panel">
+                    <h3>Acciones de Inventario</h3>
+                    <button class="panel-button" id="btnNuevoProducto"><i class="fas fa-plus"></i> Agregar Nuevo Producto</button>
+                    <button class="panel-button" id="btnAgregarStock"><i class="fas fa-arrow-up"></i> Agregar Stock</button>
+                    <button class="panel-button" id="btnQuitarStock"><i class="fas fa-arrow-down"></i> Quitar Stock</button>
+                    <button class="panel-button" id="btnHistorial"><i class="fas fa-history"></i> Historial</button>
+                </div>
             </div>
-            <div class="side-panel">
-                <h3>Acciones de Inventario</h3>
-                <button class="panel-button" id="btnNuevoProducto"><i class="fas fa-plus"></i> Agregar Nuevo Producto</button>
-                <button class="panel-button" id="btnAgregarStock"><i class="fas fa-arrow-up"></i> Agregar Stock</button>
-                <button class="panel-button" id="btnQuitarStock"><i class="fas fa-arrow-down"></i> Quitar Stock</button>
-                <button class="panel-button" id="btnHistorial"><i class="fas fa-history"></i> Historial</button>
-            </div>
-        </div>
+        </main>
     </div>
 
     <!-- Modales -->
@@ -813,7 +1004,7 @@
                 <div class="form-group">
                     <label for="edit-material-category">Categoría</label>
                     <select id="edit-material-category" class="form-control" required>
-                        <option value="Material Médico">Material Médico</option>
+                        <option value="Material Médico">Material Mdico</option>
                         <option value="Productos de Higiene">Productos de Higiene</option>
                         <option value="Material Quirúrgico">Material Quirúrgico</option>
                         <option value="Otros">Otros</option>
@@ -851,17 +1042,13 @@
                     <td>${material.minStock}</td>
                     <td>${material.consultorio}</td>
                     <td>
-                        <button class="edit-btn" data-index="${index}">Editar</button>
-                        <button class="delete-btn" data-index="${index}">Eliminar</button>
+                        <button class="delete-btn" data-index="${index}"><i class="fas fa-trash-alt"></i></button>
                     </td>
                 `;
                 tbody.appendChild(tr);
             });
 
-            // Agregar event listeners a los botones de editar y eliminar
-            document.querySelectorAll('.edit-btn').forEach(button => {
-                button.addEventListener('click', editItem);
-            });
+            // Actualizar los event listeners
             document.querySelectorAll('.delete-btn').forEach(button => {
                 button.addEventListener('click', deleteItem);
             });
@@ -940,40 +1127,64 @@
 
             function calculateCategoryPercentage(category) {
                 if (category.currentStock === 0) return 0;
-                const minStockPercentage = 20; // El stock mínimo representa el 20% del gráfico
+                const minStockPercentage = 20;
                 const currentStockPercentage = (category.currentStock - category.minStock) / (category.minStock * 4) * 100;
                 return Math.max(Math.min(currentStockPercentage + minStockPercentage, 100), minStockPercentage);
             }
 
-            function updatePieChart(id, percentage) {
-                const pieSlice = document.querySelector(`#${id} .pie-slice`);
-                const degrees = (percentage / 100) * 360;
-                pieSlice.style.transform = `rotate(${degrees}deg)`;
-                
-                let color;
-                if (percentage >= 75) {
-                    color = '#1cc88a'; // Verde
-                } else if (percentage >= 50) {
-                    color = '#f6c23e'; // Amarillo
-                } else {
-                    color = '#e74a3b'; // Rojo
-                }
-                pieSlice.style.backgroundColor = color;
-
-                const container = document.getElementById(id);
-                let percentText = container.querySelector('.percent-text');
-                if (!percentText) {
-                    percentText = document.createElement('div');
-                    percentText.className = 'percent-text';
-                    container.appendChild(percentText);
-                }
-                percentText.textContent = `${Math.round(percentage)}%`;
+            function getColor(percentage) {
+                if (percentage >= 85) return '#4CAF50'; // Verde
+                if (percentage >= 70) return '#8BC34A'; // Verde amarillento
+                if (percentage >= 55) return '#FFEB3B'; // Amarillo
+                if (percentage >= 40) return '#FFC107'; // Amarillo anaranjado
+                if (percentage >= 25) return '#FF9800'; // Naranja
+                return '#F44336'; // Rojo
             }
 
-            updatePieChart('pieMaterialMedico', calculateCategoryPercentage(categories['Material Médico']));
-            updatePieChart('pieProductosHigiene', calculateCategoryPercentage(categories['Productos de Higiene']));
-            updatePieChart('pieMaterialQuirurgico', calculateCategoryPercentage(categories['Material Quirúrgico']));
-            updatePieChart('pieOtros', calculateCategoryPercentage(categories['Otros']));
+            function updateDonutChart(id, percentage, category) {
+                const chart = document.getElementById(id);
+                const donut = chart.querySelector('.donut-ring');
+                const percentText = chart.querySelector('.percent-text');
+
+                const degrees = (percentage / 100) * 360;
+                const color = getColor(percentage);
+
+                donut.style.stroke = color;
+                donut.style.strokeDasharray = `${degrees} 360`;
+
+                percentText.textContent = `${Math.round(percentage)}%`;
+                
+                // Actualiza los valores sin mostrar el texto
+                chart.dataset.currentStock = category.currentStock;
+                chart.dataset.minStock = category.minStock;
+
+                // Animación
+                let currentPercentage = 0;
+                const animationDuration = 1000; // 1 segundo
+                const startTime = performance.now();
+
+                function animate(currentTime) {
+                    const elapsedTime = currentTime - startTime;
+                    if (elapsedTime < animationDuration) {
+                        currentPercentage = (elapsedTime / animationDuration) * percentage;
+                        donut.style.strokeDasharray = `${(currentPercentage / 100) * 360} 360`;
+                        percentText.textContent = `${Math.round(currentPercentage)}%`;
+                        donut.style.stroke = getColor(currentPercentage);
+                        requestAnimationFrame(animate);
+                    } else {
+                        donut.style.strokeDasharray = `${degrees} 360`;
+                        percentText.textContent = `${Math.round(percentage)}%`;
+                        donut.style.stroke = color;
+                    }
+                }
+
+                requestAnimationFrame(animate);
+            }
+
+            updateDonutChart('pieMaterialMedico', calculateCategoryPercentage(categories['Material Médico']), categories['Material Médico']);
+            updateDonutChart('pieProductosHigiene', calculateCategoryPercentage(categories['Productos de Higiene']), categories['Productos de Higiene']);
+            updateDonutChart('pieMaterialQuirurgico', calculateCategoryPercentage(categories['Material Quirúrgico']), categories['Material Quirúrgico']);
+            updateDonutChart('pieOtros', calculateCategoryPercentage(categories['Otros']), categories['Otros']);
         }
 
         function renderHistorial() {
@@ -991,23 +1202,6 @@
                 `;
                 tbody.appendChild(tr);
             });
-        }
-
-        function editItem(e) {
-            const index = e.target.dataset.index;
-            const item = inventory[index];
-            
-            // Llenar el modal de edición con los datos del item
-            document.getElementById('edit-material-name').value = item.name;
-            document.getElementById('edit-material-quantity').value = item.quantity;
-            document.getElementById('edit-material-min-stock').value = item.minStock;
-            document.getElementById('edit-material-category').value = item.category;
-            
-            // Guardar el índice del item que se está editando
-            document.getElementById('edit-material-index').value = index;
-            
-            // Abrir el modal de edición
-            openModal('modalEditarProducto');
         }
 
         function deleteItem(e) {
@@ -1186,6 +1380,11 @@
         updateCharts();
 
         closeModal('modalEditarProducto');
+    });
+
+    document.getElementById('logoutButton').addEventListener('click', function() {
+        localStorage.clear();
+        window.location.href = 'index.html';
     });
     </script>
 
