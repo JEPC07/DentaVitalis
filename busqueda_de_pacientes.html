@@ -834,16 +834,18 @@
 
         .paciente-nav {
             display: flex;
+            justify-content: space-around;
             background-color: #f0f3f7;
             border-radius: 8px;
             overflow: hidden;
             margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            /* Eliminamos cualquier sombra */
+            box-shadow: none;
         }
 
         .nav-button {
             flex: 1;
-            padding: 12px 15px;
+            padding: 15px 0;
             border: none;
             background-color: transparent;
             cursor: pointer;
@@ -853,6 +855,9 @@
             transition: all 0.3s ease;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            position: relative;
+            /* Eliminamos cualquier sombra */
+            box-shadow: none;
         }
 
         .nav-button:hover {
@@ -860,13 +865,17 @@
         }
 
         .nav-button.active {
-            background-color: #295369;
-            color: #fff;
+            color: #295369;
         }
 
-        /* Añadir un borde suave entre los botones */
-        .nav-button:not(:last-child) {
-            border-right: 1px solid #d1d9e6;
+        .nav-button.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: #295369;
         }
 
         /* Ajustar el espaciado del contenido del modal */
@@ -890,52 +899,187 @@
         .section-content.active {
             display: block;
         }
+
+        .close {
+            color: #295369;
+            float: left;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-right: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .close:hover {
+            color: #1d3c50;
+        }
+
+        .close i {
+            vertical-align: middle;
+        }
+
+        /* Ajusta el margen de la foto del paciente */
+        .paciente-foto {
+            margin-right: 20px;
+        }
+
+        /* Estilos de navegación lateral */
+        #topNav {
+            background-color: #ffffff;
+            color: var(--primary-color);
+            width: 250px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            padding: 80px 0 20px;
+            box-sizing: border-box;
+            z-index: 999;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        #topNav::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background-color: #ffffff;
+            z-index: 1001;
+        }
+
+        #topNav .button-container {
+            position: relative;
+            z-index: 1002;
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            padding: 0 5px;
+            margin-top: 20px;
+            gap: 10px;
+        }
+
+        .nav-button {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 16px 5px;
+            background-color: #ffffff;
+            color: var(--primary-color);
+            border: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-button i {
+            font-size: 20px;
+            margin-right: 10px;
+            color: var(--primary-color);
+        }
+
+        .nav-button::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: var(--primary-color);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .nav-button:hover::after, .nav-button.active::after {
+            transform: translateX(0);
+        }
+
+        .nav-button.active {
+            background-color: rgba(41, 83, 105, 0.1);
+        }
+
+        .nav-button:hover {
+            background-color: rgba(41, 83, 105, 0.05);
+        }
+
+        /* Ajustes para el contenedor principal */
+        .main-container {
+            margin-left: 250px;
+            margin-top: 60px;
+            width: calc(100% - 250px);
+            height: calc(100vh - 60px);
+            overflow-y: auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
     </style>
 </head>
 
-<body>
-    <!-- Barra de navegación superior -->
-    <div class="navbar">
-        <h2>Búsqueda de Pacientes</h2>
-    </div>
+<body id="page-top">
+    <div id="wrapper">
+        <!-- Barra de navegación superior con título -->
+        <nav class="navbar navbar-expand static-top" id="topBarNav">
+            <h1 class="navbar-brand"><i class="fas fa-tooth"></i> DentaVitalis</h1>
+            <button class="btn-logout" id="logoutButton" title="Cerrar sesión">
+                <i class="fas fa-lock"></i>
+            </button>
+        </nav>
 
-    <!-- Barra de navegación lateral -->
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <h2><i class="fas fa-tooth"></i> DentaVitalis</h2>
-        </div>
-        <ul class="sidebar-menu">
-            <li><a href="secondary.html"><i class="fas fa-home"></i>Menú Principal</a></li>
-            <li><a href="crear_historia_clinica.html"><i class="fas fa-file-medical"></i>Crear Historia Clínica</a></li>
-            <li><a href="inventario_de_materiales.html"><i class="fas fa-boxes"></i>Inventario de Materiales</a></li>
-            <li><a href="caja.html"><i class="fas fa-cash-register"></i>Caja</a></li>
-            <li><a href="busqueda_de_pacientes.html" class="active"><i class="fas fa-search"></i>Búsqueda de Pacientes</a></li>
-            <li><a href="tratamientos.html"><i class="fas fa-tooth"></i>Tratamientos</a></li>
-        </ul>
-    </div>
-
-    <!-- Contenedor principal -->
-    <div class="main-container">
-        <div class="content">
-            <div class="search-container">
-                <h1 class="page-title">Búsqueda de Pacientes</h1>
-                <img src="logo.png" alt="Logo DentaVitalis" class="logo">
-                <form class="search-form" onsubmit="buscarPaciente(); return false;">
-                    <input type="text" id="searchInput" class="search-input" placeholder="Ingrese nombre, apellido o DNI del paciente">
-                    <button type="submit" class="search-button">
-                        <i class="fas fa-search"></i>
-                        Buscar
-                    </button>
-                </form>
-                <div id="suggestions" class="suggestions"></div>
+        <!-- Barra de navegación lateral (sin el título) -->
+        <nav id="topNav">
+            <div class="button-container">
+                <button class="nav-button" onclick="location.href='secondary.html'">
+                    <i class="fas fa-home"></i> INICIO
+                </button>
+                <button class="nav-button" onclick="location.href='crear_historia_clinica.html'">
+                    <i class="fas fa-user-md"></i> CREAR HISTORIA
+                </button>
+                <button class="nav-button" onclick="location.href='inventario_de_materiales.html'">
+                    <i class="fas fa-boxes"></i> INVENTARIO
+                </button>
+                <button class="nav-button" onclick="location.href='caja.html'">
+                    <i class="fas fa-cash-register"></i> CAJA
+                </button>
+                <button class="nav-button active" onclick="location.href='busqueda_de_pacientes.html'">
+                    <i class="fas fa-search"></i> HISTORIAS
+                </button>
             </div>
-        </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-container">
+            <!-- Aquí va el contenido existente de busqueda_de_pacientes.html -->
+            <div class="content">
+                <div class="search-container">
+                    <h1 class="page-title">Búsqueda de Pacientes</h1>
+                    <img src="logo.png" alt="Logo DentaVitalis" class="logo">
+                    <form class="search-form" onsubmit="buscarPaciente(); return false;">
+                        <input type="text" id="searchInput" class="search-input" placeholder="Ingrese nombre, apellido o DNI del paciente">
+                        <button type="submit" class="search-button">
+                            <i class="fas fa-search"></i>
+                            Buscar
+                        </button>
+                    </form>
+                    <div id="suggestions" class="suggestions"></div>
+                </div>
+            </div>
+        </main>
     </div>
 
     <!-- Modal para mostrar los datos del paciente -->
     <div id="pacienteModal" class="modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
+            <span class="close"><i class="fas fa-arrow-left"></i></span>
             <h2>Datos del Paciente</h2>
             <div id="pacienteData" class="paciente-info"></div>
         </div>
@@ -944,8 +1088,8 @@
     <!-- Añade este nuevo modal después del modal existente -->
     <div id="pacienteDetalleModal" class="modal paciente-detalle-modal">
         <div class="modal-content paciente-detalle-content">
-            <span class="close">&times;</span>
             <div class="paciente-header">
+                <span class="close"><i class="fas fa-arrow-left"></i></span>
                 <img src="placeholder-avatar.jpg" alt="Foto del paciente" class="paciente-foto">
                 <div class="paciente-info-basica">
                     <h2 id="pacienteNombre"></h2>
@@ -978,8 +1122,42 @@
             </div>
             <div id="tratamientosContent" class="section-content">
                 <!-- Contenido de la sección Tratamientos -->
-                <h3>Tratamientos del paciente</h3>
-                <!-- Aquí puedes agregar la lista de tratamientos -->
+                <div class="paciente-detalles">
+                    <div class="tratamientos-lista">
+                        <h3>TRATAMIENTOS DEL PACIENTE</h3>
+                        <div id="tratamientosExistentes"></div>
+                    </div>
+                    <div class="nuevo-tratamiento">
+                        <h3>AGREGAR NUEVO TRATAMIENTO</h3>
+                        <form id="nuevoTratamientoForm">
+                            <div class="form-group">
+                                <label for="fechaTratamiento">Fecha del tratamiento:</label>
+                                <input type="date" id="fechaTratamiento" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="tipoTratamiento">Tipo de tratamiento:</label>
+                                <select id="tipoTratamiento" required>
+                                    <option value="">Seleccione un tipo</option>
+                                    <option value="Limpieza dental">Limpieza dental</option>
+                                    <option value="Extracción">Extracción</option>
+                                    <option value="Empaste">Empaste</option>
+                                    <option value="Ortodoncia">Ortodoncia</option>
+                                    <option value="Blanqueamiento">Blanqueamiento</option>
+                                    <option value="Otro">Otro</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="descripcionTratamiento">Descripción del tratamiento:</label>
+                                <textarea id="descripcionTratamiento" rows="4" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="costoTratamiento">Costo del tratamiento:</label>
+                                <input type="number" id="costoTratamiento" min="0" step="0.01" required>
+                            </div>
+                            <button type="submit" class="agregar-tratamiento">AGREGAR TRATAMIENTO</button>
+                        </form>
+                    </div>
+                </div>
             </div>
             <div id="odontogramaContent" class="section-content">
                 <!-- Contenido de la sección Odontograma -->
@@ -995,12 +1173,12 @@
         </div>
     </div>
 
+    <!-- Asegúrate de que este script esté al final del archivo, justo antes de cerrar el </body> -->
     <script>
         const searchInput = document.getElementById('searchInput');
         const suggestions = document.getElementById('suggestions');
-        const modal = document.getElementById('pacienteModal');
-        const pacienteData = document.getElementById('pacienteData');
-        const closeBtn = document.getElementsByClassName('close')[0];
+        const pacienteDetalleModal = document.getElementById('pacienteDetalleModal');
+        const closeBtns = document.getElementsByClassName('close');
 
         searchInput.addEventListener('input', buscarSugerencias);
 
@@ -1032,19 +1210,26 @@
         }
 
         function mostrarDetallesPaciente(paciente) {
-            const detalleModal = document.getElementById('pacienteDetalleModal');
-            
             document.getElementById('pacienteNombre').textContent = `${paciente.apellido.toUpperCase()}, ${paciente.nombre}`;
             document.getElementById('pacienteFechaNacimiento').textContent = `${paciente.fechaNacimiento} | ${paciente.genero}`;
             
+            const pacienteFoto = document.querySelector('.paciente-foto');
+            if (paciente.foto) {
+                pacienteFoto.src = paciente.foto;
+                pacienteFoto.style.display = 'block';
+            } else {
+                pacienteFoto.style.display = 'none';
+                // Aquí puedes agregar lógica para mostrar un icono según el género
+            }
+            
             document.getElementById('signosVitales').innerHTML = `
-                <div><span>ALTURA</span><span>${paciente.altura || '1.78'} Mts</span></div>
-                <div><span>PESO</span><span>${paciente.peso || '74'} Kg</span></div>
-                <div><span>BMI</span><span>${paciente.bmi || '23.4'} BMI</span></div>
-                <div><span>TEMPERATURA</span><span>${paciente.temperatura || '36.5'} °C</span></div>
-                <div><span>FREC. RESPIRATORIA</span><span>${paciente.frecRespiratoria || '17'} r/m</span></div>
-                <div><span>PRESIÓN ARTERIAL</span><span>${paciente.presionArterial || '120/80'} mmHg</span></div>
-                <div><span>FREC. CARDIACA</span><span>${paciente.frecCardiaca || '62'} Fc</span></div>
+                <div><span>ALTURA</span><span>${paciente.altura || 'No registrado'} Mts</span></div>
+                <div><span>PESO</span><span>${paciente.peso || 'No registrado'} Kg</span></div>
+                <div><span>BMI</span><span>${paciente.bmi || 'No registrado'} BMI</span></div>
+                <div><span>TEMPERATURA</span><span>${paciente.temperatura || 'No registrado'} °C</span></div>
+                <div><span>FREC. RESPIRATORIA</span><span>${paciente.frecRespiratoria || 'No registrado'} r/m</span></div>
+                <div><span>PRESIÓN ARTERIAL</span><span>${paciente.presionArterial || 'No registrado'} mmHg</span></div>
+                <div><span>FREC. CARDIACA</span><span>${paciente.frecCardiaca || 'No registrado'} Fc</span></div>
             `;
             
             document.getElementById('antecedentesPatologicos').innerHTML = `
@@ -1062,10 +1247,11 @@
             // Asegúrate de que la pestaña "Historia" esté activa por defecto
             document.querySelector('.nav-button[data-section="historia"]').click();
             
-            detalleModal.style.display = 'block';
+            pacienteDetalleModal.style.display = 'block';
         }
 
-        function buscarPaciente() {
+        function buscarPaciente(e) {
+            if (e) e.preventDefault(); // Previene el envío del formulario si se proporciona un evento
             const busqueda = searchInput.value.toLowerCase();
             const historiasClinicas = JSON.parse(localStorage.getItem('historiasClinicas')) || [];
             
@@ -1082,17 +1268,17 @@
             }
         }
 
-        // Actualizar la funcionalidad de cierre para el nuevo modal
-        const detalleModal = document.getElementById('pacienteDetalleModal');
-        const detalleCloseBtn = detalleModal.querySelector('.close');
+        // Cerrar el modal cuando se hace clic en la flecha de cierre
+        Array.from(closeBtns).forEach(btn => {
+            btn.onclick = function() {
+                pacienteDetalleModal.style.display = 'none';
+            }
+        });
 
-        detalleCloseBtn.onclick = function() {
-            detalleModal.style.display = 'none';
-        }
-
+        // Cerrar el modal si se hace clic fuera de él
         window.onclick = function(event) {
-            if (event.target == detalleModal) {
-                detalleModal.style.display = 'none';
+            if (event.target == pacienteDetalleModal) {
+                pacienteDetalleModal.style.display = 'none';
             }
         }
 
@@ -1101,6 +1287,9 @@
             e.preventDefault();
             buscarPaciente();
         });
+
+        // Añade un evento de clic al botón de búsqueda
+        document.querySelector('.search-button').addEventListener('click', buscarPaciente);
 
         // Funcionalidad para la barra de navegación del paciente
         const navButtons = document.querySelectorAll('.nav-button');
@@ -1115,6 +1304,11 @@
                 const section = this.dataset.section;
                 document.getElementById(`${section}Content`).classList.add('active');
             });
+        });
+
+        document.getElementById('logoutButton').addEventListener('click', function() {
+            localStorage.clear();
+            window.location.href = 'index.html';
         });
     </script>
 </body>
